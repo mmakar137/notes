@@ -1,0 +1,55 @@
+.card {
+  background: #ffffff;
+  padding: 16px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.05rem;
+  color: #1a1a2e;
+  word-break: break-word;
+}
+
+.deleteButton {
+  background: #f4f5f9;
+  color: #9a9ab0;
+  border: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+.deleteButton:hover {
+  background: #e74c3c;
+  color: #ffffff;
+}
+
+.content {
+  margin: 0;
+  color: #4a4a68;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.date {
+  margin: 0;
+  font-size: 0.75rem;
+  color: #9a9ab0;
+}
