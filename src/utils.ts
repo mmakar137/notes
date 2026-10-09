@@ -1,6 +1,6 @@
-import { type Note, type NoteDTO } from "./types";
+import { type Note, type NoteDTO } from "./types"
 
-export const DB_LINK = "http://localhost:3000";
+export const DB_LINK = "http://localhost:3000"
 
 export function mapNoteFromDTO(note: NoteDTO): Note {
   return {
@@ -10,5 +10,5 @@ export function mapNoteFromDTO(note: NoteDTO): Note {
     createdAt: new Date(note.createdAt),
     hidden: note.hidden,
     tags: note.tags,
-  };
+  }
 }
