@@ -46,15 +46,14 @@ export default function NoteFilterForm({
   }
 
   const handleSortChange = (
-    e: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    const value = e.target.value as "desc" | "asc"
-    setSortOrder(value)
-    onFilterChange("sort", (params) => {
-      params.set("_sort", "createdAt")
-      params.set("_order", value)
-    })
-  }
+  e: React.ChangeEvent<HTMLSelectElement>
+) => {
+  const value = e.target.value as "desc" | "asc"
+  setSortOrder(value)
+  onFilterChange("sort", (params) => {
+    params.set("_sort", value === "desc" ? "-createdAt" : "createdAt")
+  })
+}
 
   const handleTagToggle = (tag: string) => {
     const next = selectedTags.includes(tag)

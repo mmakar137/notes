@@ -9,7 +9,9 @@ import NoteFilterForm from "./NoteFilterForm"
 function App() {
   const [notes, setNotes] = useState<Note[]>([])
   const [error, setError] = useState("")
-  const [filters, setFilters] = useState<NoteFilters>({})
+  const [filters, setFilters] = useState<NoteFilters>({
+    sort: (params) => params.set("_sort", "-createdAt"),
+  })
   const [selectedTags, setSelectedTags] = useState<string[]>([])
 
   const handleFilterChange = (
@@ -19,15 +21,18 @@ function App() {
     setFilters((prev) => ({ ...prev, [filter]: fn }))
   }
 
-  useEffect(() => {
-    const params = new URLSearchParams()
-    Object.values(filters).forEach((fn) => fn(params))
+  const refetchNotes = () => {
+    const params = Object.values(filters).reduce(
+      (acc, fn) => {
+        fn(acc)
+        return acc
+      },
+      new URLSearchParams()
+    )
 
-    const query = params.toString()
-      ? `?${params.toString()}`
-      : ""
+    const query = params.toString() ? `?${params.toString()}` : ""
 
-    fetch(`${DB_LINK}/notes${query}`)
+    return fetch(`${DB_LINK}/notes${query}`)
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`)
         return res.json()
@@ -41,6 +46,11 @@ function App() {
           "Could not load notes. Is the server running (npm run db)?"
         )
       )
+  }
+
+  useEffect(() => {
+    refetchNotes()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters])
 
   const allTags = Array.from(new Set(notes.flatMap((n) => n.tags)))
@@ -62,11 +72,8 @@ function App() {
         if (!res.ok) throw new Error(`HTTP ${res.status}`)
         return res.json()
       })
-      .then((note: NoteDTO) => {
-        setNotes((prev) => [...prev, mapNoteFromDTO(note)])
-        setError("")
-        return true
-      })
+      .then(() => refetchNotes())
+      .then(() => true)
       .catch(() => {
         setError("Could not save the note.")
         return false
