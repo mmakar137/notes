@@ -1,4 +1,4 @@
-import type { Note } from "./types"
+import type { Note } from "../types"
 import styles from "./styles.module.css"
 
 interface Props {

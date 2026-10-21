@@ -1,5 +1,5 @@
-import CreateNoteForm from "./CreateNoteForm"
-import NoteCard from "./NoteCard"
+import CreateNoteForm from "./components/CreateNoteForm"
+import NoteCard from "./components/NoteCard"
 import type { Note, NoteDTO, NoteFilters } from "./types"
 import { useEffect, useState } from "react"
 import { DB_LINK, mapNoteFromDTO } from "./utils"

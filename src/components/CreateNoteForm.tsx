@@ -1,5 +1,5 @@
 import { useState } from "react"
-import type { Note } from "./types"
+import type { Note } from "../types"
 import styles from "./styles.module.css"
 import { useForm, type SubmitHandler } from "react-hook-form"
 
