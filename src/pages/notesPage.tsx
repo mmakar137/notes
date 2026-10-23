@@ -3,7 +3,7 @@ import NoteCard from "../components/NoteCard"
 import type { Note, NoteDTO, NoteFilters } from "../types"
 import { useEffect, useState } from "react"
 import { DB_LINK, mapNoteFromDTO } from "../utils"
-import styles from "./components/styles.module.css"
+import styles from "../components/styles.module.css"
 import NoteFilterForm from "../components/NoteFilterForm"
 
 export default function NotesPage() {
