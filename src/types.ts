@@ -1,5 +1,3 @@
-import type { Dispatch, SetStateAction } from "react" 
-
 export interface Note {
   id: string
   title: string
@@ -31,5 +29,5 @@ export interface User {
 
 export interface AuthContextType {
   user: User | null
-  setUser: Dispatch<SetStateAction<User | null>>
+  setUser: (user: User | null) => void
 }

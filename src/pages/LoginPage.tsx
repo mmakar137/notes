@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router"
+import { useAuthContext } from "../hooks/useAuthContext"
 
 type LoginFormValues = {
   email: string
@@ -9,7 +10,7 @@ type LoginFormValues = {
 
 export default function LoginPage() {
   const navigate = useNavigate()
-  // Добавляем состояние для ошибки сервера
+  const {setUser} = useAuthContext()
   const [serverError, setServerError] = useState("")
 
   const { 
@@ -21,7 +22,7 @@ export default function LoginPage() {
   })
 
   const handleLogin = (data: LoginFormValues) => {
-    setServerError("") // Сбрасываем старую ошибку при новой попытке
+    setServerError("") 
     const params = new URLSearchParams()
     params.set("email", data.email)
     params.set("password", data.password)
@@ -30,6 +31,7 @@ export default function LoginPage() {
       .then((res) => res.json())
       .then((user) => {
         if (user && user.length > 0) {
+          setUser(user)
           navigate("/notes")
         } else {
           setServerError("Неверный email или пароль")
@@ -68,7 +70,6 @@ export default function LoginPage() {
           {errors.password && <p style={{ color: 'red', margin: '5px 0', fontSize: '12px' }}>{errors.password.message}</p>}
         </div>
 
-        {/* Вывод ошибки сервера (если пароль неверный или сервер упал) */}
         {serverError && <p style={{ color: 'red', margin: '10px 0', fontWeight: 'bold' }}>{serverError}</p>}
 
         <button type="submit" disabled={!isValid}>Login</button>
