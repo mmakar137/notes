@@ -2,6 +2,7 @@ import { createBrowserRouter, Link, RouterProvider } from "react-router";
 import LoginPage from "../src/pages/LoginPage";
 import NotesPage from "./pages/NotesPage";
 import { AuthProvider } from "./hooks/useAuthContext";
+import Layout from "./pages/Layout";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,16 @@ const router = createBrowserRouter([
     path: "/login",
     element: <LoginPage />,
   },
+    {
+    element: <Layout />,
+    children: [
+      {
+        path: "/notes",
+        element: <NotesPage />,
+      },
+    ],
+  },
+
   {
     path: "/notes",
     element: <NotesPage />,
@@ -26,7 +37,8 @@ const router = createBrowserRouter([
 ]);
 
 export default function App() {
-  return( <AuthProvider>
+  return( 
+  <AuthProvider>
   <RouterProvider router={router} />
     </AuthProvider>
   );

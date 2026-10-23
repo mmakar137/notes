@@ -6,10 +6,10 @@
       "password": "admin"
     }
   ],
-
   "notes": [
     {
       "id": "1",
+      "authorId": "1x",
       "title": "Note 1",
       "content": "Content 1",
       "createdAt": "2026-09-26T06:31:11.901Z",
@@ -21,6 +21,7 @@
     },
     {
       "id": "2",
+      "authorId": "1x",
       "title": "Note 2",
       "content": "Content 2",
       "createdAt": "2026-09-25T06:31:11.901Z",
@@ -32,6 +33,7 @@
     },
     {
       "id": "pQdzuZbYIBM",
+      "authorId": "1x",
       "title": "Home Task",
       "content": "Do the hometask",
       "createdAt": "2026-09-26T07:15:45.599Z",
@@ -43,6 +45,7 @@
     },
     {
       "id": "drAhqDVBmY0",
+      "authorId": "1x",
       "title": "Таска",
       "content": "",
       "createdAt": "2026-09-26T07:20:51.684Z",
@@ -54,6 +57,7 @@
     },
     {
       "id": "wj_jZfUJxzc",
+      "authorId": "1x",
       "title": "Таск",
       "content": "",
       "createdAt": "2026-09-26T07:21:26.089Z",
@@ -68,6 +72,7 @@
     },
     {
       "id": "MNvW1Zdw3AE",
+      "authorId": "1x",
       "title": "новая",
       "content": "задачка",
       "createdAt": "2026-10-10T08:29:52.288Z",
@@ -76,6 +81,7 @@
     },
     {
       "id": "hwB-LCqOHbM",
+      "authorId": "1x",
       "title": "newest",
       "content": "one",
       "createdAt": "2026-10-10T08:46:36.841Z",
