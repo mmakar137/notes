@@ -1,3 +1,5 @@
+import type { Dispatch, SetStateAction } from "react" 
+
 export interface Note {
   id: string
   title: string
@@ -20,3 +22,14 @@ export type NoteFilters = Record<
   string,
   (params: URLSearchParams) => void
 >
+
+export interface User {
+  "id": string
+  "email": string
+  "password": string
+}
+
+export interface AuthContextType {
+  user: User | null
+  setUser: Dispatch<SetStateAction<User | null>>
+}

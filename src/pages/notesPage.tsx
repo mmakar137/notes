@@ -5,8 +5,11 @@ import { useEffect, useState } from "react"
 import { DB_LINK, mapNoteFromDTO } from "../utils"
 import styles from "../components/styles.module.css"
 import NoteFilterForm from "../components/NoteFilterForm"
+import { useAuthContext } from "../hooks/useAuthContext"
+import { Navigate } from "react-router"
 
 export default function NotesPage() {
+  const { user } = useAuthContext()
   const [notes, setNotes] = useState<Note[]>([])
   const [error, setError] = useState("")
   const [filters, setFilters] = useState<NoteFilters>({
@@ -78,6 +81,10 @@ export default function NotesPage() {
         setError("Could not save the note.")
         return false
       })
+  }
+
+  if (!user){
+    return <Navigate to="/login" />
   }
 
   const handleDelete = (id: string) => {
