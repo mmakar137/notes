@@ -1,11 +1,10 @@
-import CreateNoteForm from "../components/CreateNoteForm"
 import NoteCard from "../components/NoteCard"
 import type { Note, NoteDTO, NoteFilters } from "../types"
 import { useEffect, useState } from "react"
 import { DB_LINK, mapNoteFromDTO } from "../utils"
 import NoteFilterForm from "../components/NoteFilterForm"
 import { useAuthContext } from "../hooks/authContext"
-import { Navigate } from "react-router"
+import { Link, Navigate } from "react-router"
 
 export default function NotesPage() {
   const { user } = useAuthContext()
@@ -64,24 +63,6 @@ export default function NotesPage() {
           selectedTags.every((tag) => note.tags.includes(tag))
         )
 
-  const handleSubmit = (note: Note) => {
-    return fetch(`${DB_LINK}/notes/`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(note),
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`)
-        return res.json()
-      })
-      .then(() => refetchNotes())
-      .then(() => true)
-      .catch(() => {
-        setError("Could not save the note.")
-        return false
-      })
-  }
-
   const handleDelete = (id: string) => {
     fetch(`${DB_LINK}/notes/${id}`, { method: "DELETE" })
       .then((res) => {
@@ -101,7 +82,12 @@ export default function NotesPage() {
       <h1 className="mb-9 text-center text-[2.25rem] font-bold tracking-[-0.025em] text-[var(--color-text)]">
         Notes
       </h1>
-      <CreateNoteForm onSubmit={handleSubmit}></CreateNoteForm>
+      <Link
+        to="/create"
+        className="mb-6 inline-block rounded-[10px] bg-[#2563eb] px-4 py-2.5 text-[0.95rem] font-semibold text-white transition-colors duration-150 hover:bg-[#1d4ed8] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+      >
+        Add note
+      </Link>
       <NoteFilterForm
         onFilterChange={handleFilterChange}
         allTags={allTags}
