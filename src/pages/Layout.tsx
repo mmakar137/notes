@@ -15,6 +15,12 @@ export default function Layout() {
         <div className="flex items-center gap-2">
           <Link
             className="cursor-pointer rounded-md bg-[#2563eb] px-3 py-1.5 text-sm font-medium text-white transition-colors duration-150 hover:bg-[#1d4ed8] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+            to="/create"
+          >
+            Add note
+          </Link>
+          <Link
+            className="cursor-pointer rounded-md bg-[#2563eb] px-3 py-1.5 text-sm font-medium text-white transition-colors duration-150 hover:bg-[#1d4ed8] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
             to="/notes"
           >
             Back to notes
