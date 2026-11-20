@@ -12,7 +12,13 @@ export default function Layout() {
     <>
       <header className="bg-gray-100 p-4 md:p-8 lg:p-12 flex items-center justify-between">
           <Link className="text-lg font-bold" to="/">Notes</Link>
-        <div>
+        <div className="flex items-center gap-2">
+          <Link
+            className="cursor-pointer rounded-md bg-[#2563eb] px-3 py-1.5 text-sm font-medium text-white transition-colors duration-150 hover:bg-[#1d4ed8] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+            to="/notes"
+          >
+            Back to notes
+          </Link>
           <button
             className="cursor-pointer rounded-md bg-red-600 px-3 py-1.5 text-sm font-medium text-white transition-colors duration-150 hover:bg-red-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700"
             onClick={() => setUser(null)}
