@@ -118,11 +118,11 @@ export default function NoteFilterForm({
   }
 
   const controlClass =
-    "rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 transition-colors duration-150 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600/10"
+    "rounded-md border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-sm text-[var(--color-text)] transition-colors duration-150 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600/10"
 
   return (
-    <section className="flex w-full flex-col gap-4 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-      <h2 className="text-sm font-semibold tracking-wide text-slate-500 uppercase">
+    <section className="flex w-full flex-col gap-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-sm">
+      <h2 className="text-sm font-semibold tracking-wide text-slate-500 dark:text-slate-400 uppercase">
         Filters
       </h2>
 
@@ -134,7 +134,7 @@ export default function NoteFilterForm({
           onChange={handleSearchChange}
           className={controlClass}
         />
-        <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-600">
+        <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
           <input
             type="checkbox"
             checked={showHidden}
@@ -169,7 +169,7 @@ export default function NoteFilterForm({
           className={`${controlClass} flex cursor-pointer items-center gap-2 disabled:cursor-not-allowed disabled:opacity-60`}
         >
           <span>Tags</span>
-          <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600">
+          <span className="rounded-full bg-slate-100 dark:bg-slate-700 px-2 py-0.5 text-xs font-medium text-slate-600 dark:text-slate-400">
             {allTags.length === 0
               ? "No tags"
               : selectedTags.length === 0
@@ -180,7 +180,7 @@ export default function NoteFilterForm({
         </button>
 
         {tagsOpen && allTags.length > 0 && (
-          <div className="absolute z-10 mt-2 w-full rounded-md border border-slate-200 bg-white p-2 shadow-lg">
+          <div className="absolute z-10 mt-2 w-full rounded-md border border-[var(--color-border)] bg-[var(--color-surface)] p-2 shadow-lg">
             <input
               ref={tagSearchRef}
               autoFocus
@@ -216,12 +216,12 @@ export default function NoteFilterForm({
                     aria-selected={selected}
                     onClick={() => handleTagToggle(tag)}
                     onMouseEnter={() => setActiveIndex(index)}
-                    className={`flex cursor-pointer items-center gap-2 rounded-md px-2 py-1.5 text-sm transition-colors duration-150 hover:bg-slate-100 ${
-                      index === activeOptionIndex ? "bg-blue-50" : ""
+                    className={`flex cursor-pointer items-center gap-2 rounded-md px-2 py-1.5 text-sm transition-colors duration-150 hover:bg-slate-100 dark:hover:bg-slate-700 ${
+                      index === activeOptionIndex ? "bg-blue-50 dark:bg-slate-800" : ""
                     } ${
                       selected
-                        ? "font-medium text-blue-700"
-                        : "text-slate-700"
+                        ? "font-medium text-blue-700 dark:text-blue-300"
+                        : "text-slate-700 dark:text-slate-200"
                     }`}
                   >
                     <span aria-hidden="true" className="w-3">
@@ -232,7 +232,7 @@ export default function NoteFilterForm({
                 )
               })}
               {filteredTags.length === 0 && allTags.length > 0 && (
-                <p className="px-2 py-3 text-sm text-slate-500">
+                <p className="px-2 py-3 text-sm text-slate-500 dark:text-slate-400">
                   No tags found
                 </p>
               )}

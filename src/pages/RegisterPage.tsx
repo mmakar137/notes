@@ -11,7 +11,7 @@ type RegisterFormValues = {
 }
 
 const fieldClass =
-  "w-full rounded-[10px] border border-[#e2e8f0] bg-white px-3.5 py-2.5 text-[0.95rem] text-[#0f172a] placeholder:text-[#94a3b8] transition-[border-color,box-shadow] duration-150 focus:border-[#2563eb] focus:shadow-[0_0_0_3px_rgba(37,99,235,0.08)] focus:outline-none"
+  "w-full rounded-[10px] border border-[var(--color-border)] bg-[var(--color-surface)] px-3.5 py-2.5 text-[0.95rem] text-[var(--color-text)] placeholder:text-[var(--color-placeholder)] transition-[border-color,box-shadow] duration-150 focus:border-[#2563eb] focus:shadow-[0_0_0_3px_rgba(37,99,235,0.08)] focus:outline-none"
 
 export default function RegisterPage() {
   const [error, setError] = useState("")
@@ -94,23 +94,23 @@ export default function RegisterPage() {
         Register
       </h1>
       {error && (
-        <p className="mb-6 w-full max-w-[560px] rounded-[10px] border border-red-500/20 bg-[#fef2f2] px-4 py-3 text-[0.9rem] text-[#ef4444]">
+        <p className="mb-6 w-full max-w-[560px] rounded-[10px] border border-red-500/20 bg-[var(--color-error-bg)] px-4 py-3 text-[0.9rem] text-[var(--color-error-text)]">
           {error}
         </p>
       )}
       <form
-        className="mb-14 flex w-full max-w-[560px] flex-col gap-[18px] rounded-[14px] border border-[#e2e8f0] bg-white p-7 shadow-sm transition-shadow duration-200 focus-within:shadow-md"
+        className="mb-14 flex w-full max-w-[560px] flex-col gap-[18px] rounded-[14px] border border-[var(--color-border)] bg-[var(--color-surface)] p-7 shadow-sm transition-shadow duration-200 focus-within:shadow-md"
         onSubmit={submitForm(handleSubmit)}
       >
         <div className="flex flex-col gap-1.5">
           {errors.email && (
-            <p className="text-[0.825rem] font-medium text-[#ef4444]">
+            <p className="text-[0.825rem] font-medium text-[var(--color-error-text)]">
               {errors.email.message}
             </p>
           )}
           <label
             htmlFor="register-email"
-            className="flex flex-col gap-1.5 text-[0.9rem] font-medium text-[#0f172a]"
+            className="flex flex-col gap-1.5 text-[0.9rem] font-medium text-[var(--color-text)]"
           >
             Email
             <input
@@ -131,13 +131,13 @@ export default function RegisterPage() {
 
         <div className="flex flex-col gap-1.5">
           {errors.password && (
-            <p className="text-[0.825rem] font-medium text-[#ef4444]">
+            <p className="text-[0.825rem] font-medium text-[var(--color-error-text)]">
               {errors.password.message}
             </p>
           )}
           <label
             htmlFor="register-password"
-            className="flex flex-col gap-1.5 text-[0.9rem] font-medium text-[#0f172a]"
+            className="flex flex-col gap-1.5 text-[0.9rem] font-medium text-[var(--color-text)]"
           >
             Password
             <input

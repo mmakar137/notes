@@ -41,7 +41,7 @@ export default function CreateNotePage() {
         Create note
       </h1>
       {error && (
-        <p className="mb-6 w-full max-w-[560px] rounded-[10px] border border-red-500/20 bg-[#fef2f2] px-4 py-3 text-[0.9rem] text-[#ef4444]">
+        <p className="mb-6 w-full max-w-[560px] rounded-[10px] border border-red-500/20 bg-[var(--color-error-bg)] px-4 py-3 text-[0.9rem] text-[var(--color-error-text)]">
           {error}
         </p>
       )}

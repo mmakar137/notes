@@ -45,21 +45,21 @@ export default function NoteViewPage() {
         {note ? note.title : "View note"}
       </h1>
       {error && (
-        <p className="mb-6 w-full max-w-[560px] rounded-[10px] border border-red-500/20 bg-[#fef2f2] px-4 py-3 text-[0.9rem] text-[#ef4444]">
+        <p className="mb-6 w-full max-w-[560px] rounded-[10px] border border-red-500/20 bg-[var(--color-error-bg)] px-4 py-3 text-[0.9rem] text-[var(--color-error-text)]">
           {error}
         </p>
       )}
       {note && (
-        <article className="mb-14 flex w-full max-w-[560px] flex-col gap-5 rounded-[14px] border border-[#e2e8f0] bg-white p-7 shadow-sm">
-          <div className="flex flex-wrap items-center justify-between gap-2 text-sm text-[#64748b]">
+        <article className="mb-14 flex w-full max-w-[560px] flex-col gap-5 rounded-[14px] border border-[var(--color-border)] bg-[var(--color-surface)] p-7 shadow-sm">
+          <div className="flex flex-wrap items-center justify-between gap-2 text-sm text-[var(--color-text-muted)]">
             <time dateTime={note.createdAt.toISOString()}>
               {note.createdAt.toLocaleDateString()}
             </time>
             <span
               className={`rounded-full px-2 py-0.5 text-xs font-medium ${
                 note.hidden
-                  ? "bg-amber-100 text-amber-700"
-                  : "bg-emerald-50 text-emerald-700"
+                  ? "bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300"
+                  : "bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300"
               }`}
             >
               {note.hidden ? "Hidden" : "Visible"}
@@ -71,7 +71,7 @@ export default function NoteViewPage() {
               {note.tags.map((tag, index) => (
                 <span
                   key={`${tag}-${index}`}
-                  className="rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700"
+                  className="rounded-full bg-blue-50 dark:bg-slate-800 px-2 py-0.5 text-xs font-medium text-blue-700 dark:text-blue-300"
                 >
                   {tag}
                 </span>
@@ -81,7 +81,7 @@ export default function NoteViewPage() {
 
           <p
             id="view-body"
-            className="whitespace-pre-wrap break-words text-[0.95rem] leading-relaxed text-[#0f172a]"
+            className="whitespace-pre-wrap break-words text-[0.95rem] leading-relaxed text-[var(--color-text)]"
           >
             {note.content}
           </p>
@@ -89,7 +89,7 @@ export default function NoteViewPage() {
           <div className="flex flex-wrap gap-3">
             <Link
               to="/notes"
-              className="rounded-[10px] border border-[#e2e8f0] bg-white p-[11px] text-[0.95rem] font-semibold text-[#2563eb] transition-colors duration-150 hover:bg-[#f8fafc] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+              className="rounded-[10px] border border-[var(--color-border)] bg-[var(--color-surface)] p-[11px] text-[0.95rem] font-semibold text-[#2563eb] transition-colors duration-150 hover:bg-[var(--color-surface-muted)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
             >
               Back to notes
             </Link>

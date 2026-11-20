@@ -40,13 +40,13 @@ export default class ErrorBoundary extends Component<Props, State> {
         </h1>
         <div
           id="error-fallback"
-          className="flex w-full max-w-[560px] flex-col items-center gap-6 rounded-[14px] border border-[#e2e8f0] bg-white p-7 shadow-sm"
+          className="flex w-full max-w-[560px] flex-col items-center gap-6 rounded-[14px] border border-[var(--color-border)] bg-[var(--color-surface)] p-7 shadow-sm"
         >
-          <p className="text-center text-[0.95rem] text-[#64748b]">
+          <p className="text-center text-[0.95rem] text-[var(--color-text-muted)]">
             An unexpected error occurred. You can return to the home page and try
             again.
           </p>
-          <p className="w-full rounded-[10px] border border-red-500/20 bg-[#fef2f2] px-4 py-3 text-[0.9rem] text-[#ef4444]">
+          <p className="w-full rounded-[10px] border border-red-500/20 bg-[var(--color-error-bg)] px-4 py-3 text-[0.9rem] text-[var(--color-error-text)]">
             {details}
           </p>
           <button

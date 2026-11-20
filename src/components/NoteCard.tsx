@@ -17,11 +17,11 @@ export default function NoteCard({ note, onDelete }: Props) {
     <article
       className={`flex h-full flex-col gap-3 rounded-md border p-2 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md sm:p-4 ${
         note.hidden
-          ? "border-amber-200 bg-amber-50"
-          : "border-slate-200 bg-white"
+          ? "border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-950"
+          : "border-[var(--color-border)] bg-[var(--color-surface)]"
       }`}
     >
-      <h2 className="text-center text-lg font-semibold break-words text-slate-900">
+      <h2 className="text-center text-lg font-semibold break-words text-[var(--color-text)]">
         <Link
           to={`/notes/${note.id}`}
           className="hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
@@ -30,15 +30,15 @@ export default function NoteCard({ note, onDelete }: Props) {
         </Link>
       </h2>
 
-      <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500">
+      <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500 dark:text-slate-400">
         <time dateTime={note.createdAt.toISOString()}>
           {note.createdAt.toLocaleDateString()}
         </time>
         <span
           className={`rounded-full px-2 py-0.5 font-medium ${
             note.hidden
-              ? "bg-amber-100 text-amber-700"
-              : "bg-emerald-50 text-emerald-700"
+              ? "bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300"
+              : "bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300"
           }`}
         >
           {note.hidden ? "Hidden" : "Visible"}
@@ -52,7 +52,7 @@ export default function NoteCard({ note, onDelete }: Props) {
             event.preventDefault()
             toggleFavorite(note.id)
           }}
-          className="rounded-md p-1 text-slate-400 transition-colors duration-200 hover:bg-amber-50 hover:text-amber-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+          className="rounded-md p-1 text-slate-400 transition-colors duration-200 hover:bg-amber-50 dark:hover:bg-amber-900/40 hover:text-amber-500 dark:hover:text-amber-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
         >
           <svg
             viewBox="0 0 24 24"
@@ -74,34 +74,34 @@ export default function NoteCard({ note, onDelete }: Props) {
         {note.tags.map((tag, index) => (
           <span
              key={`${tag}-${index}`}
-            className="rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700"
+            className="rounded-full bg-blue-50 dark:bg-slate-800 px-2 py-0.5 text-xs font-medium text-blue-700 dark:text-blue-300"
           >
             {tag}
           </span>
         ))}
       </div>
 
-      <p className="whitespace-pre-wrap break-words text-sm leading-relaxed text-slate-700">
+      <p className="whitespace-pre-wrap break-words text-sm leading-relaxed text-slate-700 dark:text-slate-200">
         {note.content}
       </p>
 
       <div className="mt-auto flex items-center gap-2">
         <Link
           to={`/notes/${note.id}`}
-          className="rounded-md border border-transparent px-3 py-1.5 text-sm font-medium text-[#2563eb] transition-colors duration-200 hover:bg-blue-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+          className="rounded-md border border-transparent px-3 py-1.5 text-sm font-medium text-[#2563eb] transition-colors duration-200 hover:bg-[var(--color-accent-soft)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
         >
           View
         </Link>
         <Link
           to={`/notes/${note.id}/edit`}
-          className="rounded-md border border-transparent px-3 py-1.5 text-sm font-medium text-[#2563eb] transition-colors duration-200 hover:bg-blue-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+          className="rounded-md border border-transparent px-3 py-1.5 text-sm font-medium text-[#2563eb] transition-colors duration-200 hover:bg-[var(--color-accent-soft)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
         >
           Edit
         </Link>
         <button
           type="button"
           onClick={() => onDelete(note.id)}
-          className="mt-auto self-start rounded-md border border-transparent px-3 py-1.5 text-sm font-medium text-slate-500 transition-colors duration-200 hover:border-red-200 hover:bg-red-50 hover:text-red-600 focus:outline-none focus:ring-2 focus:ring-red-200"
+          className="mt-auto self-start rounded-md border border-transparent px-3 py-1.5 text-sm font-medium text-slate-500 dark:text-slate-400 transition-colors duration-200 hover:border-red-200 hover:bg-red-50 dark:hover:bg-red-950 hover:text-red-600 dark:hover:text-red-300 focus:outline-none focus:ring-2 focus:ring-red-200"
         >
           Delete
         </button>

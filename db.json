@@ -108,6 +108,17 @@
         "кца"
       ],
       "authorId": "FCBINPOEn58"
+    },
+    {
+      "id": "bMD5lOGIUPY",
+      "title": "цкцуп",
+      "content": "уцпкцупцу",
+      "createdAt": "2026-11-20T22:36:15.130Z",
+      "hidden": false,
+      "tags": [
+        "уцпкуцп"
+      ],
+      "authorId": "FCBINPOEn58"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

@@ -6,9 +6,9 @@ export default function NotFoundPage() {
       <h1 className="mb-9 text-center text-[2.25rem] font-bold tracking-[-0.025em] text-[var(--color-text)]">
         Page not found.
       </h1>
-      <div className="flex w-full max-w-[560px] flex-col items-center gap-6 rounded-[14px] border border-[#e2e8f0] bg-white p-7 shadow-sm">
+      <div className="flex w-full max-w-[560px] flex-col items-center gap-6 rounded-[14px] border border-[var(--color-border)] bg-[var(--color-surface)] p-7 shadow-sm">
         <div id="not-found" className="flex w-full flex-col items-center gap-6">
-          <p className="text-center text-[0.95rem] text-[#64748b]">
+          <p className="text-center text-[0.95rem] text-[var(--color-text-muted)]">
             The page you are looking for does not exist.
           </p>
           <Link

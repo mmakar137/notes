@@ -99,16 +99,16 @@ export default function CreateNoteForm({ onSubmit }: Props) {
   }
 
   const fieldClass =
-    "w-full rounded-[10px] border border-[#e2e8f0] bg-white px-3.5 py-2.5 text-[0.95rem] text-[#0f172a] placeholder:text-[#94a3b8] transition-[border-color,box-shadow] duration-150 focus:border-[#2563eb] focus:shadow-[0_0_0_3px_rgba(37,99,235,0.08)] focus:outline-none"
+    "w-full rounded-[10px] border border-[var(--color-border)] bg-[var(--color-surface)] px-3.5 py-2.5 text-[0.95rem] text-[var(--color-text)] placeholder:text-[var(--color-placeholder)] transition-[border-color,box-shadow] duration-150 focus:border-[#2563eb] focus:shadow-[0_0_0_3px_rgba(37,99,235,0.08)] focus:outline-none"
 
   return (
     <form
-      className="mb-14 flex w-full max-w-[560px] flex-col gap-[18px] rounded-[14px] border border-[#e2e8f0] bg-white p-7 shadow-sm transition-shadow duration-200 focus-within:shadow-md"
+      className="mb-14 flex w-full max-w-[560px] flex-col gap-[18px] rounded-[14px] border border-[var(--color-border)] bg-[var(--color-surface)] p-7 shadow-sm transition-shadow duration-200 focus-within:shadow-md"
       onSubmit={handleSubmit(onFormSubmit)}
     >
       <div className="flex flex-col gap-1.5">
         {errors.title && (
-          <p className="text-[0.825rem] font-medium text-[#ef4444]">
+          <p className="text-[0.825rem] font-medium text-[var(--color-error-text)]">
             {errors.title.message}
           </p>
         )}
@@ -122,7 +122,7 @@ export default function CreateNoteForm({ onSubmit }: Props) {
 
       <div className="flex flex-col gap-1.5">
         {errors.content && (
-          <p className="text-[0.825rem] font-medium text-[#ef4444]">
+          <p className="text-[0.825rem] font-medium text-[var(--color-error-text)]">
             {errors.content.message}
           </p>
         )}
@@ -135,7 +135,7 @@ export default function CreateNoteForm({ onSubmit }: Props) {
 
       <div className="flex flex-col gap-1.5">
         {errors.tags && (
-          <p className="text-[0.825rem] font-medium text-[#ef4444]">
+          <p className="text-[0.825rem] font-medium text-[var(--color-error-text)]">
             {errors.tags.message}
           </p>
         )}
@@ -150,7 +150,7 @@ export default function CreateNoteForm({ onSubmit }: Props) {
       </div>
 
       <div>
-        <label className="flex cursor-pointer flex-row items-center gap-2.5 text-[0.9rem] text-[#64748b] select-none">
+        <label className="flex cursor-pointer flex-row items-center gap-2.5 text-[0.9rem] text-[var(--color-text-muted)] select-none">
           <input
             type="checkbox"
             className="h-[18px] w-[18px] cursor-pointer accent-[#2563eb]"
