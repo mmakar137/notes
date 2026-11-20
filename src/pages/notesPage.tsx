@@ -61,7 +61,7 @@ export default function NotesPage() {
     selectedTags.length === 0
       ? notes
       : notes.filter((note) =>
-          selectedTags.some((tag) => note.tags.includes(tag))
+          selectedTags.every((tag) => note.tags.includes(tag))
         )
 
   const handleSubmit = (note: Note) => {
