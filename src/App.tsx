@@ -4,6 +4,7 @@ import NotesPage from "./pages/notesPage";
 import CreateNotePage from "./pages/CreateNotePage";
 import RegisterPage from "./pages/RegisterPage";
 import EditNotePage from "./pages/EditNotePage";
+import NoteViewPage from "./pages/NoteViewPage";
 import { AuthProvider } from "./hooks/useAuthContext";
 import Layout from "./pages/Layout";
 
@@ -55,6 +56,10 @@ const router = createBrowserRouter([
       {
         path: "/create",
         element: <CreateNotePage />,
+      },
+      {
+        path: "/notes/:id",
+        element: <NoteViewPage />,
       },
       {
         path: "/notes/:id/edit",
