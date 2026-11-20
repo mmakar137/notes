@@ -1,14 +1,32 @@
 import { useState } from "react"
 import { useNavigate } from "react-router"
 import CreateNoteForm from "../components/CreateNoteForm"
+import type { Note } from "../types"
+import { DB_LINK } from "../utils"
 
 export default function CreateNotePage() {
-  const [error] = useState("")
+  const [error, setError] = useState("")
   const navigate = useNavigate()
 
-  const handleSubmit = (): Promise<boolean> => {
-    navigate("/notes")
-    return Promise.resolve(true)
+  const handleSubmit = (note: Note): Promise<boolean> => {
+    setError("")
+    return fetch(`${DB_LINK}/notes/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(note),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+        return res.json()
+      })
+      .then(() => {
+        navigate("/notes")
+        return true
+      })
+      .catch(() => {
+        setError("Could not save the note.")
+        return false
+      })
   }
 
   return (
