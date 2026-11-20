@@ -19,7 +19,7 @@
   "notes": [
     {
       "id": "1",
-      "authorId": "1x",
+      "authorId": "1",
       "title": "Note 1",
       "content": "Content 1",
       "createdAt": "2026-09-26T06:31:11.901Z",
@@ -31,7 +31,7 @@
     },
     {
       "id": "2",
-      "authorId": "1x",
+      "authorId": "1",
       "title": "Note 2",
       "content": "Content 2",
       "createdAt": "2026-09-25T06:31:11.901Z",
@@ -43,7 +43,7 @@
     },
     {
       "id": "pQdzuZbYIBM",
-      "authorId": "1x",
+      "authorId": "1",
       "title": "Home Task",
       "content": "Do the hometask",
       "createdAt": "2026-09-26T07:15:45.599Z",
@@ -55,7 +55,7 @@
     },
     {
       "id": "drAhqDVBmY0",
-      "authorId": "1x",
+      "authorId": "1",
       "title": "Таска",
       "content": "",
       "createdAt": "2026-09-26T07:20:51.684Z",
@@ -67,7 +67,7 @@
     },
     {
       "id": "wj_jZfUJxzc",
-      "authorId": "1x",
+      "authorId": "1",
       "title": "Таск",
       "content": "",
       "createdAt": "2026-09-26T07:21:26.089Z",
@@ -82,7 +82,7 @@
     },
     {
       "id": "MNvW1Zdw3AE",
-      "authorId": "1x",
+      "authorId": "1",
       "title": "новая",
       "content": "задачка",
       "createdAt": "2026-10-10T08:29:52.288Z",
@@ -91,12 +91,23 @@
     },
     {
       "id": "hwB-LCqOHbM",
-      "authorId": "1x",
+      "authorId": "1",
       "title": "newest",
       "content": "one",
       "createdAt": "2026-10-10T08:46:36.841Z",
       "hidden": true,
       "tags": []
+    },
+    {
+      "id": "I4VeiSybVTM",
+      "title": "цку ку",
+      "content": "цкаца",
+      "createdAt": "2026-11-20T21:28:09.367Z",
+      "hidden": false,
+      "tags": [
+        "кца"
+      ],
+      "authorId": "FCBINPOEn58"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
