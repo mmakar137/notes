@@ -1,14 +1,22 @@
-import { createBrowserRouter, Link, RouterProvider } from "react-router";
+import { createBrowserRouter, Link, Outlet, RouterProvider } from "react-router";
 import LoginPage from "../src/pages/LoginPage";
 import NotesPage from "./pages/notesPage";
 import CreateNotePage from "./pages/CreateNotePage";
 import RegisterPage from "./pages/RegisterPage";
 import EditNotePage from "./pages/EditNotePage";
 import NoteViewPage from "./pages/NoteViewPage";
+import ErrorBoundary from "./pages/ErrorBoundary";
 import { AuthProvider } from "./hooks/useAuthContext";
 import Layout from "./pages/Layout";
 
 const router = createBrowserRouter([
+  {
+    element: (
+      <ErrorBoundary>
+        <Outlet />
+      </ErrorBoundary>
+    ),
+    children: [
   {
     path: "/",
     element: (
@@ -72,12 +80,16 @@ const router = createBrowserRouter([
     path: "/notes",
     element: <NotesPage />,
   },
+    ],
+  },
 ]);
 
 export default function App() {
   return( 
   <AuthProvider>
+  <ErrorBoundary>
   <RouterProvider router={router} />
+  </ErrorBoundary>
     </AuthProvider>
   );
 }
