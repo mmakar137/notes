@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useId, useRef, useState } from "react"
 
 interface Props {
   onFilterChange: (
@@ -19,6 +19,33 @@ export default function NoteFilterForm({
   const [search, setSearch] = useState("")
   const [showHidden, setShowHidden] = useState(false)
   const [sortOrder, setSortOrder] = useState<"desc" | "asc">("desc")
+  const [tagsOpen, setTagsOpen] = useState(false)
+  const [tagQuery, setTagQuery] = useState("")
+  const [activeIndex, setActiveIndex] = useState(-1)
+  const tagContainerRef = useRef<HTMLDivElement>(null)
+  const tagTriggerRef = useRef<HTMLButtonElement>(null)
+  const tagSearchRef = useRef<HTMLInputElement>(null)
+  const listboxId = useId()
+  const optionId = (index: number) => `${listboxId}-option-${index}`
+  const query = tagQuery.trim().toLowerCase()
+  const filteredTags = query
+    ? allTags.filter((tag) => tag.toLowerCase().includes(query))
+    : allTags
+  const activeOptionIndex =
+    activeIndex >= 0 && activeIndex < filteredTags.length ? activeIndex : -1
+
+  useEffect(() => {
+    if (!tagsOpen) return
+    const handlePointerDown = (event: PointerEvent) => {
+      if (!tagContainerRef.current?.contains(event.target as Node)) {
+        setTagsOpen(false)
+        setTagQuery("")
+        setActiveIndex(-1)
+      }
+    }
+    document.addEventListener("pointerdown", handlePointerDown)
+    return () => document.removeEventListener("pointerdown", handlePointerDown)
+  }, [tagsOpen])
 
   const handleSearchChange = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -62,6 +89,34 @@ export default function NoteFilterForm({
     onTagsChange(next)
   }
 
+  const handleTagKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Escape" || e.key === "Tab") {
+      setTagsOpen(false)
+      setTagQuery("")
+      setActiveIndex(-1)
+      if (e.key === "Escape") {
+        e.preventDefault()
+        tagTriggerRef.current?.focus()
+      }
+      return
+    }
+    if (e.key === "ArrowDown") {
+      e.preventDefault()
+      setActiveIndex((index) => Math.min(index + 1, filteredTags.length - 1))
+      return
+    }
+    if (e.key === "ArrowUp") {
+      e.preventDefault()
+      setActiveIndex((index) => Math.max(index - 1, -1))
+      return
+    }
+    if (e.key === "Enter") {
+      e.preventDefault()
+      const tag = filteredTags[activeOptionIndex]
+      if (tag) handleTagToggle(tag)
+    }
+  }
+
   const controlClass =
     "rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 transition-colors duration-150 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600/10"
 
@@ -98,21 +153,86 @@ export default function NoteFilterForm({
         </select>
       </div>
 
-      <div className="flex flex-wrap gap-2">
-        {allTags.map((tag) => (
-          <label
-            key={tag}
-            className="flex cursor-pointer items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600 transition-colors duration-150 hover:bg-slate-200"
-          >
+      <div ref={tagContainerRef} className="relative w-64">
+        <button
+          ref={tagTriggerRef}
+          type="button"
+          aria-haspopup="listbox"
+          aria-expanded={tagsOpen}
+          aria-controls={listboxId}
+          disabled={allTags.length === 0}
+          onClick={() => setTagsOpen((open) => !open)}
+          className={`${controlClass} flex cursor-pointer items-center gap-2 disabled:cursor-not-allowed disabled:opacity-60`}
+        >
+          <span>Tags</span>
+          <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600">
+            {selectedTags.length === 0
+              ? "All"
+              : `${selectedTags.length} selected`}
+          </span>
+          <span aria-hidden="true">▾</span>
+        </button>
+
+        {tagsOpen && allTags.length > 0 && (
+          <div className="absolute z-10 mt-2 w-full rounded-md border border-slate-200 bg-white p-2 shadow-lg">
             <input
-              type="checkbox"
-              checked={selectedTags.includes(tag)}
-              onChange={() => handleTagToggle(tag)}
-              className="h-3.5 w-3.5 cursor-pointer accent-blue-600"
+              ref={tagSearchRef}
+              autoFocus
+              type="text"
+              aria-label="Search tags"
+              aria-controls={listboxId}
+              aria-activedescendant={
+                activeOptionIndex >= 0 ? optionId(activeOptionIndex) : undefined
+              }
+              placeholder="Search tags"
+              value={tagQuery}
+              onChange={(e) => {
+                setTagQuery(e.target.value)
+                setActiveIndex(-1)
+              }}
+              onKeyDown={handleTagKeyDown}
+              className={`${controlClass} w-full`}
             />
-            {tag}
-          </label>
-        ))}
+            <div
+              id={listboxId}
+              role="listbox"
+              aria-label="Tags"
+              aria-multiselectable="true"
+              className="mt-2 max-h-60 overflow-y-auto"
+            >
+              {filteredTags.map((tag, index) => {
+                const selected = selectedTags.includes(tag)
+                return (
+                  <div
+                    key={tag}
+                    id={optionId(index)}
+                    role="option"
+                    aria-selected={selected}
+                    onClick={() => handleTagToggle(tag)}
+                    onMouseEnter={() => setActiveIndex(index)}
+                    className={`flex cursor-pointer items-center gap-2 rounded-md px-2 py-1.5 text-sm transition-colors duration-150 hover:bg-slate-100 ${
+                      index === activeOptionIndex ? "bg-blue-50" : ""
+                    } ${
+                      selected
+                        ? "font-medium text-blue-700"
+                        : "text-slate-700"
+                    }`}
+                  >
+                    <span aria-hidden="true" className="w-3">
+                      {selected ? "✓" : ""}
+                    </span>
+                    {tag}
+                  </div>
+                )
+              })}
+              {filteredTags.length === 0 && allTags.length > 0 && (
+                <p className="px-2 py-3 text-sm text-slate-500">
+                  No tags found
+                </p>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </section>
   )
