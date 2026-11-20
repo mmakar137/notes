@@ -1,3 +1,4 @@
+import { Link } from "react-router"
 import type { Note } from "../types"
 
 interface Props {
@@ -48,13 +49,21 @@ export default function NoteCard({ note, onDelete }: Props) {
         {note.content}
       </p>
 
-      <button
-        type="button"
-        onClick={() => onDelete(note.id)}
-        className="mt-auto self-start rounded-md border border-transparent px-3 py-1.5 text-sm font-medium text-slate-500 transition-colors duration-200 hover:border-red-200 hover:bg-red-50 hover:text-red-600 focus:outline-none focus:ring-2 focus:ring-red-200"
-      >
-        Delete
-      </button>
+      <div className="mt-auto flex items-center gap-2">
+        <Link
+          to={`/notes/${note.id}/edit`}
+          className="rounded-md border border-transparent px-3 py-1.5 text-sm font-medium text-[#2563eb] transition-colors duration-200 hover:bg-blue-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+        >
+          Edit
+        </Link>
+        <button
+          type="button"
+          onClick={() => onDelete(note.id)}
+          className="mt-auto self-start rounded-md border border-transparent px-3 py-1.5 text-sm font-medium text-slate-500 transition-colors duration-200 hover:border-red-200 hover:bg-red-50 hover:text-red-600 focus:outline-none focus:ring-2 focus:ring-red-200"
+        >
+          Delete
+        </button>
+      </div>
     </article>
   )
 }
