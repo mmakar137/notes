@@ -19,7 +19,7 @@ Date: 2026-11-20. Status: pending user approval.
 - react.dev подтверждает: прямого эквивалента `getDerivedStateFromError`/`componentDidCatch` у хуков нет; рекомендуется один общий class ErrorBoundary (https://react.dev/reference/react/Component#catching-rendering-errors-with-an-error-boundary, открыто 2026-11-20).
 
 ## Approach
-Выбран вариант A из rationale: один файл `src/components/ErrorBoundary.tsx` с class-логикой и вёрсткой fallback, обёртка вокруг `RouterProvider` в `App.tsx`. Отклонены: `react-error-boundary` (новая зависимость), `errorElement` react-router (не ловит ошибки провайдеров и противоречит выбранной точке установки), разделение на два файла (лишняя поверхность без выигрыша).
+Выбран вариант A из rationale: один файл `src/pages/ErrorBoundary.tsx` с class-логикой и вёрсткой fallback, обёртка вокруг `RouterProvider` в `App.tsx`. Отклонены: `react-error-boundary` (новая зависимость), `errorElement` react-router (не ловит ошибки провайдеров и противоречит выбранной точке установки), разделение на два файла (лишняя поверхность без выигрыша).
 
 ## Design
 - `ErrorBoundary` — class-компонент, расширяет `Component<Props, State>`; `Props` содержит `children: ReactNode`, `State` — `{ error: unknown }`.
@@ -65,7 +65,7 @@ Date: 2026-11-20. Status: pending user approval.
 - Ошибки event handlers/асинхронного кода, error reporting service, восстановление состояния форм, тест для ошибки в `AuthProvider`.
 
 ## Decisions
-- Пользователь: A (полная страница), «Back to home», сообщение + детали, установка вокруг `RouterProvider`, один файл.
+- Пользователь: A (полная страница), «Back to home», сообщение + детали, установка вокруг `RouterProvider`, один файл в `src/pages/ErrorBoundary.tsx` (2026-11-20: пользователь поправил расположение с `src/components/` на `src/pages/`; полноэкранный fallback хранится рядом со страницами).
 - Agent's call: детали ошибки показываются на экране, полный stack — только в консоли.
 - Agent's call: тестовый сбой моделируется невалидными данными (`createdAt`), а не test-only кодом в приложении.
 
