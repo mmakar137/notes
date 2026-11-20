@@ -8,6 +8,7 @@ import NoteViewPage from "./pages/NoteViewPage";
 import ErrorBoundary from "./pages/ErrorBoundary";
 import { AuthProvider } from "./hooks/useAuthContext";
 import Layout from "./pages/Layout";
+import NotFoundPage from "./pages/NotFoundPage";
 
 const router = createBrowserRouter([
   {
@@ -79,6 +80,10 @@ const router = createBrowserRouter([
   {
     path: "/notes",
     element: <NotesPage />,
+  },
+  {
+    path: "*",
+    element: <NotFoundPage />,
   },
     ],
   },
