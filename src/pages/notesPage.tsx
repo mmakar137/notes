@@ -1,7 +1,7 @@
 import NoteCard from "../components/NoteCard"
 import type { Note, NoteDTO, NoteFilters } from "../types"
 import { useEffect, useState } from "react"
-import { DB_LINK, mapNoteFromDTO } from "../utils"
+import { DB_LINK, mapNoteFromDTO, OWN_NOTES_ONLY_MESSAGE } from "../utils"
 import NoteFilterForm from "../components/NoteFilterForm"
 import { useAuthContext } from "../hooks/authContext"
 import { Navigate } from "react-router"
@@ -23,6 +23,10 @@ export default function NotesPage() {
   }
 
   const refetchNotes = () => {
+    if (!user) {
+      return Promise.resolve()
+    }
+
     const params = Object.values(filters).reduce(
       (acc, fn) => {
         fn(acc)
@@ -39,7 +43,11 @@ export default function NotesPage() {
         return res.json()
       })
       .then((data: NoteDTO[]) => {
-        setNotes(data.map(mapNoteFromDTO))
+        setNotes(
+          data
+            .map(mapNoteFromDTO)
+            .filter((note) => note.authorId === user.id)
+        )
         setError("")
       })
       .catch(() =>
@@ -52,7 +60,7 @@ export default function NotesPage() {
   useEffect(() => {
     refetchNotes()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters])
+  }, [filters, user?.id])
 
   const allTags = Array.from(new Set(notes.flatMap((n) => n.tags)))
 
@@ -64,6 +72,12 @@ export default function NotesPage() {
         )
 
   const handleDelete = (id: string) => {
+    const note = notes.find((item) => item.id === id)
+    if (!note || note.authorId !== user?.id) {
+      setError(OWN_NOTES_ONLY_MESSAGE)
+      return
+    }
+
     fetch(`${DB_LINK}/notes/${id}`, { method: "DELETE" })
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`)
