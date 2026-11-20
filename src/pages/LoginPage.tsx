@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useForm } from "react-hook-form"
-import { useNavigate } from "react-router"
+import { Link, useNavigate } from "react-router"
 import { useAuthContext } from "../hooks/authContext"
 
 type LoginFormValues = {
@@ -74,6 +74,12 @@ export default function LoginPage() {
 
         <button type="submit" disabled={!isValid}>Login</button>
       </form>
+      <Link
+        to="/register"
+        className="mt-4 inline-block text-[0.9rem] font-medium text-[#2563eb] no-underline transition-colors duration-150 hover:text-[#1d4ed8]"
+      >
+        Register
+      </Link>
     </div>
   )
 }
