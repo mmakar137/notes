@@ -16,7 +16,12 @@ export default function NoteCard({ note, onDelete }: Props) {
       }`}
     >
       <h2 className="text-center text-lg font-semibold break-words text-slate-900">
-        {note.title}
+        <Link
+          to={`/notes/${note.id}`}
+          className="hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+        >
+          {note.title}
+        </Link>
       </h2>
 
       <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500">
@@ -50,6 +55,12 @@ export default function NoteCard({ note, onDelete }: Props) {
       </p>
 
       <div className="mt-auto flex items-center gap-2">
+        <Link
+          to={`/notes/${note.id}`}
+          className="rounded-md border border-transparent px-3 py-1.5 text-sm font-medium text-[#2563eb] transition-colors duration-200 hover:bg-blue-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+        >
+          View
+        </Link>
         <Link
           to={`/notes/${note.id}/edit`}
           className="rounded-md border border-transparent px-3 py-1.5 text-sm font-medium text-[#2563eb] transition-colors duration-200 hover:bg-blue-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
