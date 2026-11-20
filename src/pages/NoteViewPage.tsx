@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router"
+import { useAuthContext } from "../hooks/authContext"
 import type { Note, NoteDTO } from "../types"
-import { DB_LINK, mapNoteFromDTO } from "../utils"
+import { DB_LINK, mapNoteFromDTO, OWN_NOTES_ONLY_MESSAGE } from "../utils"
 
 export default function NoteViewPage() {
   const { id } = useParams()
+  const { user } = useAuthContext()
   const [note, setNote] = useState<Note | null>(null)
   const [error, setError] = useState("")
 
@@ -18,6 +20,10 @@ export default function NoteViewPage() {
       })
       .then((loaded) => {
         if (!active) return
+        if (loaded.authorId !== user?.id) {
+          setError(OWN_NOTES_ONLY_MESSAGE)
+          return
+        }
         setNote(loaded)
       })
       .catch((e: Error) => {
@@ -31,7 +37,7 @@ export default function NoteViewPage() {
     return () => {
       active = false
     }
-  }, [id])
+  }, [id, user?.id])
 
   return (
     <div className="mx-auto flex min-h-screen max-w-[1080px] flex-col items-center px-5 py-14">
