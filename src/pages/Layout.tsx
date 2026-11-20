@@ -14,7 +14,7 @@ export default function Layout() {
           <Link className="text-lg font-bold" to="/">Notes</Link>
         <div>
           <button
-            className="cursor-pointer rounded-md bg-red-600 px-3 py-1.5 text-sm font-medium text-white transition-colors duration-150 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-300"
+            className="cursor-pointer rounded-md bg-red-600 px-3 py-1.5 text-sm font-medium text-white transition-colors duration-150 hover:bg-red-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700"
             onClick={() => setUser(null)}
           >
             Logout
