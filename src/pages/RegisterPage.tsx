@@ -41,6 +41,21 @@ export default function RegisterPage() {
         return
       }
 
+      const allRes = await fetch(`${DB_LINK}/users`)
+      if (!allRes.ok) throw new Error(`HTTP ${allRes.status}`)
+      const allUsers: User[] = await allRes.json()
+      if (
+        Array.isArray(allUsers) &&
+        allUsers.some(
+          (user) =>
+            typeof user.email === "string" &&
+            user.email.toLowerCase() === values.email.toLowerCase()
+        )
+      ) {
+        setError("Этот email уже занят")
+        return
+      }
+
       const createRes = await fetch(`${DB_LINK}/users/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
