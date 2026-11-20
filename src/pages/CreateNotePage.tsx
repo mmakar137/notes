@@ -1,14 +1,14 @@
 import { useState } from "react"
 import { useNavigate } from "react-router"
 import CreateNoteForm from "../components/CreateNoteForm"
-import { useAuthContext } from "../hooks/authContext"
+import { useAuthStore } from "../store/authState"
 import type { Note } from "../types"
 import { DB_LINK, OWN_NOTES_ONLY_MESSAGE } from "../utils"
 
 export default function CreateNotePage() {
   const [error, setError] = useState("")
   const navigate = useNavigate()
-  const { user } = useAuthContext()
+  const { user } = useAuthStore()
 
   const handleSubmit = (note: Note): Promise<boolean> => {
     setError("")

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router"
 import { useForm, type SubmitHandler } from "react-hook-form"
-import { useAuthContext } from "../hooks/authContext"
+import { useAuthStore } from "../store/authState"
 import type { NoteDTO } from "../types"
 import { DB_LINK, mapNoteFromDTO, OWN_NOTES_ONLY_MESSAGE } from "../utils"
 
@@ -67,7 +67,7 @@ function parseTags(raw: string): string[] {
 export default function EditNotePage() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const { user } = useAuthContext()
+  const { user } = useAuthStore()
   const [error, setError] = useState("")
   const [loaded, setLoaded] = useState(false)
   const {

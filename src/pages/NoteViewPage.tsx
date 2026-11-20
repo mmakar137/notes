@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router"
-import { useAuthContext } from "../hooks/authContext"
+import { useAuthStore } from "../store/authState"
 import type { Note, NoteDTO } from "../types"
 import { DB_LINK, mapNoteFromDTO, OWN_NOTES_ONLY_MESSAGE } from "../utils"
 
 export default function NoteViewPage() {
   const { id } = useParams()
-  const { user } = useAuthContext()
+  const { user } = useAuthStore()
   const [note, setNote] = useState<Note | null>(null)
   const [error, setError] = useState("")
 

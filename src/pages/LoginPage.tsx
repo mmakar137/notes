@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { Link, useNavigate } from "react-router"
-import { useAuthContext } from "../hooks/authContext"
+import { useAuthStore } from "../store/authState"
 import type { User } from "../types"
 
 type LoginFormValues = {
@@ -14,7 +14,7 @@ const fieldClass =
 
 export default function LoginPage() {
   const navigate = useNavigate()
-  const { setUser } = useAuthContext()
+  const { login } = useAuthStore()
   const [serverError, setServerError] = useState("")
 
   const {
@@ -40,7 +40,7 @@ export default function LoginPage() {
             user.id
         )
         if (matched) {
-          setUser({
+          login({
             id: matched.id,
             email: String(matched.email),
             password: String(matched.password),

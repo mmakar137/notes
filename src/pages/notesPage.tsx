@@ -3,11 +3,11 @@ import type { Note, NoteDTO, NoteFilters } from "../types"
 import { useEffect, useState } from "react"
 import { DB_LINK, mapNoteFromDTO, OWN_NOTES_ONLY_MESSAGE } from "../utils"
 import NoteFilterForm from "../components/NoteFilterForm"
-import { useAuthContext } from "../hooks/authContext"
+import { useAuthStore } from "../store/authState"
 import { Navigate } from "react-router"
 
 export default function NotesPage() {
-  const { user } = useAuthContext()
+  const { user } = useAuthStore()
   const [notes, setNotes] = useState<Note[]>([])
   const [error, setError] = useState("")
   const [filters, setFilters] = useState<NoteFilters>({

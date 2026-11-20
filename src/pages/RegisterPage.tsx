@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { Link, useNavigate } from "react-router"
-import { useAuthContext } from "../hooks/authContext"
+import { useAuthStore } from "../store/authState"
 import type { User } from "../types"
 import { DB_LINK } from "../utils"
 
@@ -17,7 +17,7 @@ export default function RegisterPage() {
   const [error, setError] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const navigate = useNavigate()
-  const { setUser } = useAuthContext()
+  const { login } = useAuthStore()
 
   const {
     register,
@@ -75,7 +75,7 @@ export default function RegisterPage() {
         throw new Error("Invalid created user")
       }
 
-      setUser({
+      login({
         id: created.id,
         email: created.email,
         password: created.password,
