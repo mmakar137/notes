@@ -9,8 +9,8 @@ export default function Layout() {
   }
 
   return (
-    <div>
-      <header>
+    <>
+      <header className="bg-gray-100 p-4 md:p-8 lg:p-12 flex items-center justify-between">
         <div>
           <Link to="/">Notes</Link>
         </div>
@@ -20,7 +20,11 @@ export default function Layout() {
           </button>
         </div>
       </header>
-      <Outlet />
-    </div>
+
+<main className="p-4 md:p-8 lg:p-12"> 
+    <Outlet />
+</main>
+  
+    </>
   )
 }

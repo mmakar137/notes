@@ -1,6 +1,5 @@
 import { useState } from "react"
 import type { Note } from "../types"
-import styles from "./styles.module.css"
 import { useForm, type SubmitHandler } from "react-hook-form"
 
 const TITLE_MAX_LENGTH = 100
@@ -99,30 +98,51 @@ export default function CreateNoteForm({ onSubmit }: Props) {
     reset()
   }
 
+  const fieldClass =
+    "w-full rounded-[10px] border border-[#e2e8f0] bg-white px-3.5 py-2.5 text-[0.95rem] text-[#0f172a] placeholder:text-[#94a3b8] transition-[border-color,box-shadow] duration-150 focus:border-[#2563eb] focus:shadow-[0_0_0_3px_rgba(37,99,235,0.08)] focus:outline-none"
+
   return (
-    <form className={styles.form} onSubmit={handleSubmit(onFormSubmit)}>
-      <div>
-        {errors.title && <p>{errors.title.message}</p>}
+    <form
+      className="mb-14 flex w-full max-w-[560px] flex-col gap-[18px] rounded-[14px] border border-[#e2e8f0] bg-white p-7 shadow-sm transition-shadow duration-200 focus-within:shadow-md"
+      onSubmit={handleSubmit(onFormSubmit)}
+    >
+      <div className="flex flex-col gap-1.5">
+        {errors.title && (
+          <p className="text-[0.825rem] font-medium text-[#ef4444]">
+            {errors.title.message}
+          </p>
+        )}
         <input
           type="text"
           placeholder="Title"
+          className={fieldClass}
           {...register("title", { validate: getTitleError })}
         />
       </div>
 
-      <div>
-        {errors.content && <p>{errors.content.message}</p>}
+      <div className="flex flex-col gap-1.5">
+        {errors.content && (
+          <p className="text-[0.825rem] font-medium text-[#ef4444]">
+            {errors.content.message}
+          </p>
+        )}
         <textarea
           placeholder="Content"
+          className={`${fieldClass} min-h-[110px] resize-y`}
           {...register("content", { validate: getContentError })}
         />
       </div>
 
-      <div>
-        {errors.tags && <p>{errors.tags.message}</p>}
+      <div className="flex flex-col gap-1.5">
+        {errors.tags && (
+          <p className="text-[0.825rem] font-medium text-[#ef4444]">
+            {errors.tags.message}
+          </p>
+        )}
         <input
           type="text"
           placeholder="Tags"
+          className={fieldClass}
           {...register("tags", {
             validate: (value) => getTagsError(parseTags(value)),
           })}
@@ -130,13 +150,21 @@ export default function CreateNoteForm({ onSubmit }: Props) {
       </div>
 
       <div>
-        <label>
-          <input type="checkbox" {...register("hidden")} />
+        <label className="flex cursor-pointer flex-row items-center gap-2.5 text-[0.9rem] text-[#64748b] select-none">
+          <input
+            type="checkbox"
+            className="h-[18px] w-[18px] cursor-pointer accent-[#2563eb]"
+            {...register("hidden")}
+          />
           Hidden
         </label>
       </div>
 
-      <button type="submit" disabled={isSubmitting}>
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className="rounded-[10px] bg-[#2563eb] p-[11px] text-[0.95rem] font-semibold text-white transition-colors duration-150 hover:bg-[#1d4ed8] disabled:cursor-not-allowed disabled:opacity-60"
+      >
         {isSubmitting ? "Saving..." : "Add note"}
       </button>
     </form>

@@ -3,7 +3,6 @@ import NoteCard from "../components/NoteCard"
 import type { Note, NoteDTO, NoteFilters } from "../types"
 import { useEffect, useState } from "react"
 import { DB_LINK, mapNoteFromDTO } from "../utils"
-import styles from "../components/styles.module.css"
 import NoteFilterForm from "../components/NoteFilterForm"
 import { useAuthContext } from "../hooks/authContext"
 import { Navigate } from "react-router"
@@ -83,10 +82,6 @@ export default function NotesPage() {
       })
   }
 
-  if (!user){
-    return <Navigate to="/login" />
-  }
-
   const handleDelete = (id: string) => {
     fetch(`${DB_LINK}/notes/${id}`, { method: "DELETE" })
       .then((res) => {
@@ -97,9 +92,15 @@ export default function NotesPage() {
       .catch(() => setError("Could not delete the note."))
   }
 
+  if (!user) {
+    return <Navigate to="/login" />
+  }
+
   return (
-    <div className={styles.page}>
-      <h1>Notes</h1>
+    <div className="mx-auto flex min-h-screen max-w-[1080px] flex-col items-center px-5 py-14">
+      <h1 className="mb-9 text-center text-[2.25rem] font-bold tracking-[-0.025em] text-[var(--color-text)]">
+        Notes
+      </h1>
       <CreateNoteForm onSubmit={handleSubmit}></CreateNoteForm>
       <NoteFilterForm
         onFilterChange={handleFilterChange}
@@ -107,11 +108,15 @@ export default function NotesPage() {
         selectedTags={selectedTags}
         onTagsChange={setSelectedTags}
       />
-      {error && <p className={styles.error}>{error}</p>}
+      {error && (
+        <p className="mb-6 w-full max-w-[560px] rounded-[10px] border border-red-500/20 bg-[#fef2f2] px-4 py-3 text-[0.9rem] text-[#ef4444]">
+          {error}
+        </p>
+      )}
       {visibleNotes.length === 0 ? (
         <p>No notes found</p>
       ) : (
-        <div className={styles.notesGrid}>
+        <div className="grid w-full grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-5">
           {visibleNotes.map((note) => (
             <NoteCard
               key={note.id}
