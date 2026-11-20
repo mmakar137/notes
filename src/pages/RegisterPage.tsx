@@ -1,6 +1,9 @@
 import { useState } from "react"
 import { useForm } from "react-hook-form"
-import { Link } from "react-router"
+import { Link, useNavigate } from "react-router"
+import { useAuthContext } from "../hooks/authContext"
+import type { User } from "../types"
+import { DB_LINK } from "../utils"
 
 type RegisterFormValues = {
   email: string
@@ -11,18 +14,64 @@ const fieldClass =
   "w-full rounded-[10px] border border-[#e2e8f0] bg-white px-3.5 py-2.5 text-[0.95rem] text-[#0f172a] placeholder:text-[#94a3b8] transition-[border-color,box-shadow] duration-150 focus:border-[#2563eb] focus:shadow-[0_0_0_3px_rgba(37,99,235,0.08)] focus:outline-none"
 
 export default function RegisterPage() {
-  const [error] = useState("")
-  const [isSubmitting] = useState(false)
+  const [error, setError] = useState("")
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const navigate = useNavigate()
+  const { setUser } = useAuthContext()
 
   const {
     register,
-    handleSubmit,
+    handleSubmit: submitForm,
     formState: { errors, isValid },
   } = useForm<RegisterFormValues>({
     mode: "onChange",
   })
 
-  const onSubmit = () => {}
+  const handleSubmit = async (values: RegisterFormValues): Promise<void> => {
+    setError("")
+    setIsSubmitting(true)
+    try {
+      const checkRes = await fetch(
+        `${DB_LINK}/users?email=${encodeURIComponent(values.email)}`
+      )
+      if (!checkRes.ok) throw new Error(`HTTP ${checkRes.status}`)
+      const existing: User[] = await checkRes.json()
+      if (existing.length > 0) {
+        setError("Этот email уже занят")
+        return
+      }
+
+      const createRes = await fetch(`${DB_LINK}/users/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      })
+      if (!createRes.ok) throw new Error(`HTTP ${createRes.status}`)
+      const created: User = await createRes.json()
+      if (
+        !created ||
+        typeof created.id !== "string" ||
+        !created.id ||
+        typeof created.email !== "string" ||
+        !created.email ||
+        typeof created.password !== "string" ||
+        !created.password
+      ) {
+        throw new Error("Invalid created user")
+      }
+
+      setUser({
+        id: created.id,
+        email: created.email,
+        password: created.password,
+      })
+      navigate("/notes")
+    } catch {
+      setError("Ошибка сервера. Проверьте, запущен ли json-server.")
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
 
   return (
     <div className="mx-auto flex min-h-screen max-w-[1080px] flex-col items-center px-5 py-14">
@@ -36,7 +85,7 @@ export default function RegisterPage() {
       )}
       <form
         className="mb-14 flex w-full max-w-[560px] flex-col gap-[18px] rounded-[14px] border border-[#e2e8f0] bg-white p-7 shadow-sm transition-shadow duration-200 focus-within:shadow-md"
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={submitForm(handleSubmit)}
       >
         <div className="flex flex-col gap-1.5">
           {errors.email && (
