@@ -1,19 +1,25 @@
 import { useState } from "react"
 import { useNavigate } from "react-router"
 import CreateNoteForm from "../components/CreateNoteForm"
+import { useAuthContext } from "../hooks/authContext"
 import type { Note } from "../types"
-import { DB_LINK } from "../utils"
+import { DB_LINK, OWN_NOTES_ONLY_MESSAGE } from "../utils"
 
 export default function CreateNotePage() {
   const [error, setError] = useState("")
   const navigate = useNavigate()
+  const { user } = useAuthContext()
 
   const handleSubmit = (note: Note): Promise<boolean> => {
     setError("")
+    if (!user) {
+      setError(OWN_NOTES_ONLY_MESSAGE)
+      return Promise.resolve(false)
+    }
     return fetch(`${DB_LINK}/notes/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(note),
+      body: JSON.stringify({ ...note, authorId: user.id }),
     })
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`)
