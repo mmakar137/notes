@@ -14,6 +14,7 @@ export default function NoteFilterForm({
   onFilterChange,
   allTags,
   selectedTags,
+  onTagsChange,
 }: Props) {
   const [search, setSearch] = useState("")
   const [showHidden, setShowHidden] = useState(false)
@@ -24,7 +25,10 @@ export default function NoteFilterForm({
   const tagSearchRef = useRef<HTMLInputElement>(null)
   const listboxId = useId()
   const optionId = (index: number) => `${listboxId}-option-${index}`
-  const filteredTags = allTags
+  const query = tagQuery.trim().toLowerCase()
+  const filteredTags = query
+    ? allTags.filter((tag) => tag.toLowerCase().includes(query))
+    : allTags
 
   const handleSearchChange = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -60,6 +64,13 @@ export default function NoteFilterForm({
     params.set("_sort", value === "desc" ? "-createdAt" : "createdAt")
   })
 }
+
+  const handleTagToggle = (tag: string) => {
+    const next = selectedTags.includes(tag)
+      ? selectedTags.filter((t) => t !== tag)
+      : [...selectedTags, tag]
+    onTagsChange(next)
+  }
 
   const controlClass =
     "rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 transition-colors duration-150 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600/10"
@@ -136,16 +147,28 @@ export default function NoteFilterForm({
               aria-multiselectable="true"
               className="mt-2 max-h-60 overflow-y-auto"
             >
-              {filteredTags.map((tag, index) => (
-                <div
-                  key={tag}
-                  id={optionId(index)}
-                  role="option"
-                  className="rounded-md px-2 py-1.5 text-sm text-slate-700"
-                >
-                  {tag}
-                </div>
-              ))}
+              {filteredTags.map((tag, index) => {
+                const selected = selectedTags.includes(tag)
+                return (
+                  <div
+                    key={tag}
+                    id={optionId(index)}
+                    role="option"
+                    aria-selected={selected}
+                    onClick={() => handleTagToggle(tag)}
+                    className={`flex cursor-pointer items-center gap-2 rounded-md px-2 py-1.5 text-sm transition-colors duration-150 hover:bg-slate-100 ${
+                      selected
+                        ? "font-medium text-blue-700"
+                        : "text-slate-700"
+                    }`}
+                  >
+                    <span aria-hidden="true" className="w-3">
+                      {selected ? "✓" : ""}
+                    </span>
+                    {tag}
+                  </div>
+                )
+              })}
             </div>
           </div>
         )}
