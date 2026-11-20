@@ -161,14 +161,20 @@ export default function NoteFilterForm({
           aria-expanded={tagsOpen}
           aria-controls={listboxId}
           disabled={allTags.length === 0}
-          onClick={() => setTagsOpen((open) => !open)}
+          onClick={() => {
+            setTagsOpen((open) => !open)
+            setTagQuery("")
+            setActiveIndex(-1)
+          }}
           className={`${controlClass} flex cursor-pointer items-center gap-2 disabled:cursor-not-allowed disabled:opacity-60`}
         >
           <span>Tags</span>
           <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600">
-            {selectedTags.length === 0
-              ? "All"
-              : `${selectedTags.length} selected`}
+            {allTags.length === 0
+              ? "No tags"
+              : selectedTags.length === 0
+                ? "All"
+                : `${selectedTags.length} selected`}
           </span>
           <span aria-hidden="true">▾</span>
         </button>
