@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router"
 import { useForm, type SubmitHandler } from "react-hook-form"
+import { useAuthContext } from "../hooks/authContext"
 import type { NoteDTO } from "../types"
-import { DB_LINK, mapNoteFromDTO } from "../utils"
+import { DB_LINK, mapNoteFromDTO, OWN_NOTES_ONLY_MESSAGE } from "../utils"
 
 const TITLE_MAX_LENGTH = 100
 const CONTENT_MAX_LENGTH = 2000
@@ -66,6 +67,7 @@ function parseTags(raw: string): string[] {
 export default function EditNotePage() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const { user } = useAuthContext()
   const [error, setError] = useState("")
   const [loaded, setLoaded] = useState(false)
   const {
@@ -88,6 +90,10 @@ export default function EditNotePage() {
       })
       .then((note) => {
         if (!active) return
+        if (note.authorId !== user?.id) {
+          setError(OWN_NOTES_ONLY_MESSAGE)
+          return
+        }
         reset({
           title: note.title,
           content: note.content,
@@ -107,7 +113,7 @@ export default function EditNotePage() {
     return () => {
       active = false
     }
-  }, [id, reset])
+  }, [id, reset, user?.id])
 
   const onFormSubmit: SubmitHandler<EditNoteFormValues> = async (data) => {
     setError("")
