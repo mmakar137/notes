@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useId, useRef, useState } from "react"
 
 interface Props {
   onFilterChange: (
@@ -14,11 +14,17 @@ export default function NoteFilterForm({
   onFilterChange,
   allTags,
   selectedTags,
-  onTagsChange,
 }: Props) {
   const [search, setSearch] = useState("")
   const [showHidden, setShowHidden] = useState(false)
   const [sortOrder, setSortOrder] = useState<"desc" | "asc">("desc")
+  const [tagsOpen, setTagsOpen] = useState(false)
+  const [tagQuery, setTagQuery] = useState("")
+  const tagContainerRef = useRef<HTMLDivElement>(null)
+  const tagSearchRef = useRef<HTMLInputElement>(null)
+  const listboxId = useId()
+  const optionId = (index: number) => `${listboxId}-option-${index}`
+  const filteredTags = allTags
 
   const handleSearchChange = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -54,13 +60,6 @@ export default function NoteFilterForm({
     params.set("_sort", value === "desc" ? "-createdAt" : "createdAt")
   })
 }
-
-  const handleTagToggle = (tag: string) => {
-    const next = selectedTags.includes(tag)
-      ? selectedTags.filter((t) => t !== tag)
-      : [...selectedTags, tag]
-    onTagsChange(next)
-  }
 
   const controlClass =
     "rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 transition-colors duration-150 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600/10"
@@ -98,21 +97,58 @@ export default function NoteFilterForm({
         </select>
       </div>
 
-      <div className="flex flex-wrap gap-2">
-        {allTags.map((tag) => (
-          <label
-            key={tag}
-            className="flex cursor-pointer items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600 transition-colors duration-150 hover:bg-slate-200"
-          >
+      <div ref={tagContainerRef} className="relative w-64">
+        <button
+          type="button"
+          aria-haspopup="listbox"
+          aria-expanded={tagsOpen}
+          aria-controls={listboxId}
+          disabled={allTags.length === 0}
+          onClick={() => setTagsOpen((open) => !open)}
+          className={`${controlClass} flex cursor-pointer items-center gap-2 disabled:cursor-not-allowed disabled:opacity-60`}
+        >
+          <span>Tags</span>
+          <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600">
+            {selectedTags.length === 0
+              ? "All"
+              : `${selectedTags.length} selected`}
+          </span>
+          <span aria-hidden="true">▾</span>
+        </button>
+
+        {tagsOpen && allTags.length > 0 && (
+          <div className="absolute z-10 mt-2 w-full rounded-md border border-slate-200 bg-white p-2 shadow-lg">
             <input
-              type="checkbox"
-              checked={selectedTags.includes(tag)}
-              onChange={() => handleTagToggle(tag)}
-              className="h-3.5 w-3.5 cursor-pointer accent-blue-600"
+              ref={tagSearchRef}
+              autoFocus
+              type="text"
+              aria-label="Search tags"
+              aria-controls={listboxId}
+              placeholder="Search tags"
+              value={tagQuery}
+              onChange={(e) => setTagQuery(e.target.value)}
+              className={`${controlClass} w-full`}
             />
-            {tag}
-          </label>
-        ))}
+            <div
+              id={listboxId}
+              role="listbox"
+              aria-label="Tags"
+              aria-multiselectable="true"
+              className="mt-2 max-h-60 overflow-y-auto"
+            >
+              {filteredTags.map((tag, index) => (
+                <div
+                  key={tag}
+                  id={optionId(index)}
+                  role="option"
+                  className="rounded-md px-2 py-1.5 text-sm text-slate-700"
+                >
+                  {tag}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </section>
   )
