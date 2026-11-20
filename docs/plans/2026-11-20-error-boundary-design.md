@@ -25,10 +25,10 @@ Date: 2026-11-20. Status: pending user approval.
 - Тест task 12 живёт во внешнем scratch-CDP-харнесе `D:\opencode\tmp\opencode\tag-dropdown-test.mjs` (не в репозитории): `$env:TEST_URL = 'http://localhost:5176/notes'; node 'D:\opencode\tmp\opencode\tag-dropdown-test.mjs' --task=12`. Репозиторий не имеет test framework, и dependency добавлять запрещено; харнесс уже используется для tasks 1–11 и перехватывает `console.error` через внедряемый скрипт.
 - `ErrorBoundary` — class-компонент, расширяет `Component<Props, State>`; `Props` содержит `children: ReactNode`, `State` — `{ error: unknown }`.
 - `static getDerivedStateFromError(error: unknown)` возвращает `{ error }`; `componentDidCatch(error: unknown, info: ErrorInfo)` пишет в консоль `console.error("Uncaught error:", error, info.componentStack)`.
-- `render()`: если `this.state.error === null`, возвращает `this.props.children`; иначе — полноэкранную карточку с заголовком `Something went wrong.`, пояснением `An unexpected error occurred. You can return to the home page and try again.` (agent's call: в дизайне не было утверждённого текста), мелким текстом деталей (`error instanceof Error ? error.message : String(error)`) и кнопкой `Back to home`.
+- `render()`: если `this.state.error` равен модульному sentinel `NO_ERROR`, возвращает `this.props.children`; иначе — полноэкранную карточку с заголовком `Something went wrong.`, пояснением `An unexpected error occurred. You can return to the home page and try again.` (agent's call: в дизайне не было утверждённого текста), мелким текстом деталей (`error instanceof Error ? error.message : String(error)`, при `TypeError` — `Object.prototype.toString.call(error)`) и кнопкой `Back to home`. Sentinel после финального ревью заменил исходное сравнение с `null`, чтобы брошенный `null` не выглядел как «ошибки нет».
 - Кнопка делает полный переход `window.location.href = "/"` — boundary стоит вне роутера, поэтому `useNavigate` недоступен; полный переход также сбрасывает любое застревание в ошибочном состоянии.
 - Вёрстка повторяет карточки `src/pages/CreateNotePage.tsx:32-42` и `src/pages/EditNotePage.tsx:143-147` (файл существует, проверено 2026-11-20): контейнер `mx-auto flex min-h-screen max-w-[1080px] flex-col items-center px-5 py-14`, белая карточка с серой границей, красный баннер для деталей, синяя кнопка с focus-visible.
-- `App.tsx`: `<AuthProvider><ErrorBoundary><RouterProvider router={router} /></ErrorBoundary></AuthProvider>`. AuthProvider остаётся снаружи; дублирующий маршрут `/notes` не трогается.
+- `App.tsx`: `<AuthProvider><ErrorBoundary><RouterProvider router={router} /></ErrorBoundary></AuthProvider>`. AuthProvider остаётся снаружи; дублирующий маршрут `/notes` не трогается. Дополнительно тот же `ErrorBoundary` оборачивает `<Outlet />` в pathless-маршруте: react-router 8.5.0 перехватывает ошибки рендера маршрута своим внутренним `RenderErrorBoundary` раньше внешнего React-boundary, поэтому одной обёртки вокруг `RouterProvider` недостаточно. `errorElement` не используется.
 - Тест task 12 в `D:\opencode\tmp\opencode\tag-dropdown-test.mjs`: фикстура только для `--task=12` с невалидным `createdAt: "not-a-date"` вызывает `RangeError` в `NoteViewPage` при `toISOString()`. Проверяются fallback, детали, `console.error` и переход кнопки на `/`. Тест не добавляет test-only кода в продакшн.
 
 ## Specification
@@ -50,6 +50,8 @@ Date: 2026-11-20. Status: pending user approval.
 | Case | Expected behaviour |
 |---|---|
 | Выброшено не `Error`, а строка/null | детали показываются через `String(error)`, page не падает второй раз |
+| Выброшен `null` | `NO_ERROR` не совпадает с `null`: fallback показывается, детали `null` |
+| Выброшен объект без прототипа | `String(error)` падает с `TypeError`, fallback показывает `Object.prototype.toString.call(error)` |
 | Ошибка в `StrictMode` (dev) | fallback показывается после повторной попытки рендера; дополнительный console.error допустим |
 | Ошибка в Layout или любой странице внутри роутера | перехватывается тем же boundary |
 | Ошибка в `AuthProvider` | не перехватывается (boundary внутри провайдера) — осознанное ограничение |
@@ -59,7 +61,7 @@ Date: 2026-11-20. Status: pending user approval.
 - [ ] На странице виден текст деталей с сообщением об ошибке `Invalid time value`.
 - [ ] `console.error` вызван с ошибкой и componentStack.
 - [ ] Кнопка `Back to home` переводит на `/`.
-- [ ] tasks 1–11 зелёные; `npm run build` и `npm run lint` exit 0.
+- [ ] tasks 1–12 и 14–15 зелёные; `npm run build` и `npm run lint` exit 0.
 - [ ] Новая зависимость не добавлена; Tailwind только; запрещённые файлы и дублирующий `/notes` не изменены.
 
 ### Out of scope

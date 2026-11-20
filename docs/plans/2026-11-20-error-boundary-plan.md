@@ -117,13 +117,13 @@ type Props = { children: ReactNode }
 type State = { error: unknown }
 
 export default class ErrorBoundary extends Component<Props, State> {
-  state: State = { error: null }
+  state: State = { error: NO_ERROR }
   static getDerivedStateFromError(error: unknown): State
   componentDidCatch(error: unknown, info: ErrorInfo): void
   render(): ReactNode
 }
 ```
-`getDerivedStateFromError` возвращает `{ error }`; `componentDidCatch` вызывает `console.error("Uncaught error:", error, info.componentStack)`. `render` возвращает `this.props.children`, если `error === null`, иначе fallback:
+`getDerivedStateFromError` возвращает `{ error }`; `componentDidCatch` вызывает `console.error("Uncaught error:", error, info.componentStack)`. `render` возвращает `this.props.children`, если `error === NO_ERROR`, иначе fallback. После финального ревью исходное `{ error: null }` и сравнение `error === null` заменены sentinel `NO_ERROR` (иначе брошенный `null` выглядел как «ошибки нет»), а вычисление деталей защищено try/catch для объектов без прототипа; эти два случая покрыты tasks 14 и 15 внешнего харнеса.
 - контейнер `mx-auto flex min-h-screen max-w-[1080px] flex-col items-center px-5 py-14`;
 - `h1` с «Something went wrong.»;
 - `<div id="error-fallback">` с пояснением «An unexpected error occurred. You can return to the home page and try again.», деталями `this.state.error instanceof Error ? this.state.error.message : String(this.state.error)` и кнопкой `Back to home`;

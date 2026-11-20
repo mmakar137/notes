@@ -4,8 +4,10 @@ import type { ErrorInfo, ReactNode } from "react"
 type Props = { children: ReactNode }
 type State = { error: unknown }
 
+const NO_ERROR = Symbol("no error")
+
 export default class ErrorBoundary extends Component<Props, State> {
-  state: State = { error: null }
+  state: State = { error: NO_ERROR }
 
   static getDerivedStateFromError(error: unknown): State {
     return { error }
@@ -16,14 +18,20 @@ export default class ErrorBoundary extends Component<Props, State> {
   }
 
   render(): ReactNode {
-    if (this.state.error === null) {
+    if (this.state.error === NO_ERROR) {
       return this.props.children
     }
 
-    const details =
-      this.state.error instanceof Error
-        ? this.state.error.message
-        : String(this.state.error)
+    let details: string
+    if (this.state.error instanceof Error) {
+      details = this.state.error.message
+    } else {
+      try {
+        details = String(this.state.error)
+      } catch {
+        details = Object.prototype.toString.call(this.state.error)
+      }
+    }
 
     return (
       <div className="mx-auto flex min-h-screen max-w-[1080px] flex-col items-center px-5 py-14">
