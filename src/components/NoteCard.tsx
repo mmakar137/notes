@@ -1,4 +1,5 @@
 import { Link } from "react-router"
+import { useFavoritesStore } from "../store/favoritesState"
 import type { Note } from "../types"
 
 interface Props {
@@ -7,6 +8,11 @@ interface Props {
 }
 
 export default function NoteCard({ note, onDelete }: Props) {
+  const isFavorite = useFavoritesStore(
+    (state) => state.favoriteNoteIds.includes(note.id)
+  )
+  const toggleFavorite = useFavoritesStore((state) => state.toggleFavorite)
+
   return (
     <article
       className={`flex h-full flex-col gap-3 rounded-md border p-2 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md sm:p-4 ${
@@ -37,6 +43,31 @@ export default function NoteCard({ note, onDelete }: Props) {
         >
           {note.hidden ? "Hidden" : "Visible"}
         </span>
+        <button
+          type="button"
+          aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+          aria-pressed={isFavorite}
+          onClick={(event) => {
+            event.stopPropagation()
+            event.preventDefault()
+            toggleFavorite(note.id)
+          }}
+          className="rounded-md p-1 text-slate-400 transition-colors duration-200 hover:bg-amber-50 hover:text-amber-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            className={`h-5 w-5 ${
+              isFavorite ? "fill-amber-400 text-amber-400" : "fill-none text-slate-400"
+            }`}
+          >
+            <path
+              d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            />
+          </svg>
+        </button>
       </div>
 
       <div className="flex flex-wrap gap-1.5">
