@@ -81,11 +81,11 @@ const router = createBrowserRouter([
     path: "/notes",
     element: <NotesPage />,
   },
+    ],
+  },
   {
     path: "*",
     element: <NotFoundPage />,
-  },
-    ],
   },
 ]);
 
