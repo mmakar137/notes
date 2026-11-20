@@ -1,5 +1,6 @@
 import { useAuthStore } from "../store/authState"
 import { useThemeStore } from "../store/themeState"
+import { useToastStore } from "../store/toastState"
 import { Link, Navigate, Outlet } from "react-router"
 
 export default function Layout() {
@@ -7,6 +8,7 @@ export default function Layout() {
   const logout = useAuthStore((state) => state.logout)
   const isDark = useThemeStore((state) => state.isDark)
   const toggleTheme = useThemeStore((state) => state.toggleTheme)
+  const addToast = useToastStore((state) => state.addToast)
 
   if (!user) {
     return <Navigate to="/login" />
@@ -33,13 +35,19 @@ export default function Layout() {
             type="button"
             aria-pressed={isDark}
             className="cursor-pointer rounded-md border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-1.5 text-sm font-medium text-[var(--color-text)] transition-colors duration-150 hover:bg-[var(--color-surface-muted)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
-            onClick={() => toggleTheme()}
+            onClick={() => {
+              addToast(isDark ? "Light mode enabled" : "Dark mode enabled")
+              toggleTheme()
+            }}
           >
             {isDark ? "Light mode" : "Dark mode"}
           </button>
           <button
             className="cursor-pointer rounded-md bg-red-600 px-3 py-1.5 text-sm font-medium text-white transition-colors duration-150 hover:bg-red-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700"
-            onClick={() => logout()}
+            onClick={() => {
+              addToast("Signed out")
+              logout()
+            }}
           >
             Logout
           </button>

@@ -2,6 +2,7 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { Link, useNavigate } from "react-router"
 import { useAuthStore } from "../store/authState"
+import { useToastStore } from "../store/toastState"
 import type { User } from "../types"
 import { DB_LINK } from "../utils"
 
@@ -18,6 +19,7 @@ export default function RegisterPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const navigate = useNavigate()
   const { login } = useAuthStore()
+  const addToast = useToastStore((state) => state.addToast)
 
   const {
     register,
@@ -80,6 +82,7 @@ export default function RegisterPage() {
         email: created.email,
         password: created.password,
       })
+      addToast("Account created")
       navigate("/notes")
     } catch {
       setError("Ошибка сервера. Проверьте, запущен ли json-server.")

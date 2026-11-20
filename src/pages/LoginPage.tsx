@@ -2,6 +2,7 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { Link, useNavigate } from "react-router"
 import { useAuthStore } from "../store/authState"
+import { useToastStore } from "../store/toastState"
 import type { User } from "../types"
 
 type LoginFormValues = {
@@ -15,6 +16,7 @@ const fieldClass =
 export default function LoginPage() {
   const navigate = useNavigate()
   const { login } = useAuthStore()
+  const addToast = useToastStore((state) => state.addToast)
   const [serverError, setServerError] = useState("")
 
   const {
@@ -45,6 +47,7 @@ export default function LoginPage() {
             email: String(matched.email),
             password: String(matched.password),
           })
+          addToast("Signed in")
           navigate("/notes")
         } else {
           setServerError("Неверный email или пароль")

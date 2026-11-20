@@ -2,6 +2,7 @@ import { useState } from "react"
 import { useNavigate } from "react-router"
 import CreateNoteForm from "../components/CreateNoteForm"
 import { useAuthStore } from "../store/authState"
+import { useToastStore } from "../store/toastState"
 import type { Note } from "../types"
 import { DB_LINK, OWN_NOTES_ONLY_MESSAGE } from "../utils"
 
@@ -9,6 +10,7 @@ export default function CreateNotePage() {
   const [error, setError] = useState("")
   const navigate = useNavigate()
   const { user } = useAuthStore()
+  const addToast = useToastStore((state) => state.addToast)
 
   const handleSubmit = (note: Note): Promise<boolean> => {
     setError("")
@@ -26,6 +28,7 @@ export default function CreateNotePage() {
         return res.json()
       })
       .then(() => {
+        addToast(`Note "${note.title}" created`)
         navigate("/notes")
         return true
       })

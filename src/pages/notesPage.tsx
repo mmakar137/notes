@@ -4,10 +4,12 @@ import { useEffect, useState } from "react"
 import { DB_LINK, mapNoteFromDTO, OWN_NOTES_ONLY_MESSAGE } from "../utils"
 import NoteFilterForm from "../components/NoteFilterForm"
 import { useAuthStore } from "../store/authState"
+import { useToastStore } from "../store/toastState"
 import { Navigate } from "react-router"
 
 export default function NotesPage() {
   const { user } = useAuthStore()
+  const addToast = useToastStore((state) => state.addToast)
   const [notes, setNotes] = useState<Note[]>([])
   const [error, setError] = useState("")
   const [filters, setFilters] = useState<NoteFilters>({
@@ -82,6 +84,7 @@ export default function NotesPage() {
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`)
         setNotes((prev) => prev.filter((note) => note.id !== id))
+        addToast(`Note "${note.title}" deleted`)
         setError("")
       })
       .catch(() => setError("Could not delete the note."))

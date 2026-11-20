@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { createBrowserRouter, Link, Outlet, RouterProvider } from "react-router";
-import { useThemeStore } from "./store/themeState";
+import { useThemeStore } from "./store/themeState"
+import Toaster from "./components/Toaster";
 import LoginPage from "../src/pages/LoginPage";
 import NotesPage from "./pages/notesPage";
 import CreateNotePage from "./pages/CreateNotePage";
@@ -99,6 +100,7 @@ export default function App() {
 
   return( 
   <ErrorBoundary>
+  <Toaster />
   <RouterProvider router={router} />
   </ErrorBoundary>
   );

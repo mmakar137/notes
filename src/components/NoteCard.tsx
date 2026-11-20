@@ -1,5 +1,6 @@
 import { Link } from "react-router"
 import { useFavoritesStore } from "../store/favoritesState"
+import { useToastStore } from "../store/toastState"
 import type { Note } from "../types"
 
 interface Props {
@@ -12,6 +13,7 @@ export default function NoteCard({ note, onDelete }: Props) {
     (state) => state.favoriteNoteIds.includes(note.id)
   )
   const toggleFavorite = useFavoritesStore((state) => state.toggleFavorite)
+  const addToast = useToastStore((state) => state.addToast)
 
   return (
     <article
@@ -51,6 +53,11 @@ export default function NoteCard({ note, onDelete }: Props) {
             event.stopPropagation()
             event.preventDefault()
             toggleFavorite(note.id)
+            addToast(
+              isFavorite
+                ? `Removed "${note.title}" from favorites`
+                : `Added "${note.title}" to favorites`
+            )
           }}
           className="rounded-md p-1 text-slate-400 transition-colors duration-200 hover:bg-amber-50 dark:hover:bg-amber-900/40 hover:text-amber-500 dark:hover:text-amber-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
         >

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router"
 import { useForm, type SubmitHandler } from "react-hook-form"
 import { useAuthStore } from "../store/authState"
+import { useToastStore } from "../store/toastState"
 import type { NoteDTO } from "../types"
 import { DB_LINK, mapNoteFromDTO, OWN_NOTES_ONLY_MESSAGE } from "../utils"
 
@@ -68,6 +69,7 @@ export default function EditNotePage() {
   const { id } = useParams()
   const navigate = useNavigate()
   const { user } = useAuthStore()
+  const addToast = useToastStore((state) => state.addToast)
   const [error, setError] = useState("")
   const [loaded, setLoaded] = useState(false)
   const {
@@ -130,6 +132,7 @@ export default function EditNotePage() {
         }),
       })
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      addToast(`Note "${data.title.trim()}" updated`)
       navigate("/notes")
     } catch {
       setError("Could not save the note.")
