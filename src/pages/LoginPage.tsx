@@ -2,6 +2,7 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { Link, useNavigate } from "react-router"
 import { useAuthContext } from "../hooks/authContext"
+import type { User } from "../types"
 
 type LoginFormValues = {
   email: string
@@ -31,9 +32,19 @@ export default function LoginPage() {
 
     fetch(`http://localhost:3000/users?${params.toString()}`)
       .then((res) => res.json())
-      .then((users) => {
-        if (users && users.length > 0 && users.some((user: { password: string }) => user.password === data.password)) {
-          setUser(users)
+      .then((users: User[]) => {
+        const matched = users.find(
+          (user) =>
+            user.password === data.password &&
+            typeof user.id === "string" &&
+            user.id
+        )
+        if (matched) {
+          setUser({
+            id: matched.id,
+            email: String(matched.email),
+            password: String(matched.password),
+          })
           navigate("/notes")
         } else {
           setServerError("Неверный email или пароль")
