@@ -11,11 +11,10 @@ export default function Layout() {
   return (
     <>
       <header className="bg-gray-100 p-4 md:p-8 lg:p-12 flex items-center justify-between">
+          <Link className="text-lg font-bold" to="/">Notes</Link>
         <div>
-          <Link to="/">Notes</Link>
-        </div>
-        <div>
-          <button onClick={() => setUser(null)}>
+          <button className="text-sm"
+          onClick={() => setUser(null)}>
             Logout
           </button>
         </div>
