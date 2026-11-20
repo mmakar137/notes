@@ -22,11 +22,12 @@ Date: 2026-11-20. Status: pending user approval.
 Выбран вариант A из rationale: один файл `src/pages/ErrorBoundary.tsx` с class-логикой и вёрсткой fallback, обёртка вокруг `RouterProvider` в `App.tsx`. Отклонены: `react-error-boundary` (новая зависимость), `errorElement` react-router (не ловит ошибки провайдеров и противоречит выбранной точке установки), разделение на два файла (лишняя поверхность без выигрыша).
 
 ## Design
+- Тест task 12 живёт во внешнем scratch-CDP-харнесе `D:\opencode\tmp\opencode\tag-dropdown-test.mjs` (не в репозитории): `$env:TEST_URL = 'http://localhost:5176/notes'; node 'D:\opencode\tmp\opencode\tag-dropdown-test.mjs' --task=12`. Репозиторий не имеет test framework, и dependency добавлять запрещено; харнесс уже используется для tasks 1–11 и перехватывает `console.error` через внедряемый скрипт.
 - `ErrorBoundary` — class-компонент, расширяет `Component<Props, State>`; `Props` содержит `children: ReactNode`, `State` — `{ error: unknown }`.
 - `static getDerivedStateFromError(error: unknown)` возвращает `{ error }`; `componentDidCatch(error: unknown, info: ErrorInfo)` пишет в консоль `console.error("Uncaught error:", error, info.componentStack)`.
-- `render()`: если `this.state.error === null`, возвращает `this.props.children`; иначе — полноэкранную карточку с заголовком `Something went wrong.`, пояснением, мелким текстом деталей (`error instanceof Error ? error.message : String(error)`) и кнопкой `Back to home`.
+- `render()`: если `this.state.error === null`, возвращает `this.props.children`; иначе — полноэкранную карточку с заголовком `Something went wrong.`, пояснением `An unexpected error occurred. You can return to the home page and try again.` (agent's call: в дизайне не было утверждённого текста), мелким текстом деталей (`error instanceof Error ? error.message : String(error)`) и кнопкой `Back to home`.
 - Кнопка делает полный переход `window.location.href = "/"` — boundary стоит вне роутера, поэтому `useNavigate` недоступен; полный переход также сбрасывает любое застревание в ошибочном состоянии.
-- Вёрстка повторяет карточки `CreateNotePage.tsx:32-42` и `EditNotePage.tsx:143-147`: контейнер `mx-auto flex min-h-screen max-w-[1080px] flex-col items-center px-5 py-14`, белая карточка с серой границей, красный баннер для деталей, синяя кнопка с focus-visible.
+- Вёрстка повторяет карточки `src/pages/CreateNotePage.tsx:32-42` и `src/pages/EditNotePage.tsx:143-147` (файл существует, проверено 2026-11-20): контейнер `mx-auto flex min-h-screen max-w-[1080px] flex-col items-center px-5 py-14`, белая карточка с серой границей, красный баннер для деталей, синяя кнопка с focus-visible.
 - `App.tsx`: `<AuthProvider><ErrorBoundary><RouterProvider router={router} /></ErrorBoundary></AuthProvider>`. AuthProvider остаётся снаружи; дублирующий маршрут `/notes` не трогается.
 - Тест task 12 в `D:\opencode\tmp\opencode\tag-dropdown-test.mjs`: фикстура только для `--task=12` с невалидным `createdAt: "not-a-date"` вызывает `RangeError` в `NoteViewPage` при `toISOString()`. Проверяются fallback, детали, `console.error` и переход кнопки на `/`. Тест не добавляет test-only кода в продакшн.
 
@@ -68,6 +69,7 @@ Date: 2026-11-20. Status: pending user approval.
 - Пользователь: A (полная страница), «Back to home», сообщение + детали, установка вокруг `RouterProvider`, один файл в `src/pages/ErrorBoundary.tsx` (2026-11-20: пользователь поправил расположение с `src/components/` на `src/pages/`; полноэкранный fallback хранится рядом со страницами).
 - Agent's call: детали ошибки показываются на экране, полный stack — только в консоли.
 - Agent's call: тестовый сбой моделируется невалидными данными (`createdAt`), а не test-only кодом в приложении.
+- Builder-check 2026-11-20: вопрос о запуске task 12 закрыт внешним харнесом и командой выше; утверждение «EditNotePage не существует» неверно — файл `src/pages/EditNotePage.tsx` найден; текст пояснения зафиксирован как agent's call.
 
 ## Sources
 - `package.json:16,19` — версии React 19.2.8 и react-router 8.5.0, прочитано 2026-11-20.
