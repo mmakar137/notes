@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router"
-import { useAuthContext } from "../hooks/useAuthContext"
+import { useAuthContext } from "../hooks/authContext"
 
 type LoginFormValues = {
   email: string

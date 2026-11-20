@@ -1,4 +1,4 @@
-import { useAuthContext } from "../hooks/useAuthContext"
+import { useAuthContext } from "../hooks/authContext"
 import { Link, Navigate, Outlet } from "react-router"
 
 export default function Layout() {

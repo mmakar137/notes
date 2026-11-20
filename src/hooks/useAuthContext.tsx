@@ -1,12 +1,6 @@
-import { createContext, useContext, useState } from "react"
-import type { AuthContextType, User } from "../types"
-
-const AuthContext = createContext<AuthContextType>({
-  user: null,
-  setUser: () => {},
-})
-
-export const useAuthContext = () => useContext(AuthContext)
+import { useState } from "react"
+import type { User } from "../types"
+import { AuthContext } from "./authContext"
 
 export function AuthProvider({
   children,

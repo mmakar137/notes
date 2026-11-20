@@ -5,7 +5,7 @@ import { useEffect, useState } from "react"
 import { DB_LINK, mapNoteFromDTO } from "../utils"
 import styles from "../components/styles.module.css"
 import NoteFilterForm from "../components/NoteFilterForm"
-import { useAuthContext } from "../hooks/useAuthContext"
+import { useAuthContext } from "../hooks/authContext"
 import { Navigate } from "react-router"
 
 export default function NotesPage() {

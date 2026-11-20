@@ -1,6 +1,6 @@
 import { createBrowserRouter, Link, RouterProvider } from "react-router";
 import LoginPage from "../src/pages/LoginPage";
-import NotesPage from "./pages/NotesPage";
+import NotesPage from "./pages/notesPage";
 import { AuthProvider } from "./hooks/useAuthContext";
 import Layout from "./pages/Layout";
 
