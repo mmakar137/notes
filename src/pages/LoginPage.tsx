@@ -25,13 +25,12 @@ export default function LoginPage() {
     setServerError("") 
     const params = new URLSearchParams()
     params.set("email", data.email)
-    params.set("password", data.password)
-    
+
     fetch(`http://localhost:3000/users?${params.toString()}`)
       .then((res) => res.json())
-      .then((user) => {
-        if (user && user.length > 0) {
-          setUser(user)
+      .then((users) => {
+        if (users && users.length > 0 && users.some((user: { password: string }) => user.password === data.password)) {
+          setUser(users)
           navigate("/notes")
         } else {
           setServerError("Неверный email или пароль")
