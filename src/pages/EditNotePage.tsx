@@ -4,7 +4,12 @@ import { useForm, type SubmitHandler } from "react-hook-form"
 import { useAuthStore } from "../store/authState"
 import { useToastStore } from "../store/toastState"
 import type { NoteDTO } from "../types"
-import { DB_LINK, mapNoteFromDTO, OWN_NOTES_ONLY_MESSAGE } from "../utils"
+import {
+  DB_LINK,
+  mapNoteFromDTO,
+  NOTE_ACCESS_MESSAGE,
+  ownNoteUrl,
+} from "../utils"
 
 const TITLE_MAX_LENGTH = 100
 const CONTENT_MAX_LENGTH = 2000
@@ -84,18 +89,31 @@ export default function EditNotePage() {
 
   useEffect(() => {
     let active = true
-    fetch(`${DB_LINK}/notes/${encodeURIComponent(id ?? "")}`)
+    const noteId = id ?? ""
+    const userId = user?.id ?? ""
+
+    fetch(ownNoteUrl(noteId, userId))
       .then(async (res) => {
-        if (res.status === 404) throw new Error("NOT_FOUND")
         if (!res.ok) throw new Error("LOAD_FAILED")
-        return mapNoteFromDTO((await res.json()) as NoteDTO)
+        return (await res.json()) as NoteDTO[]
       })
-      .then((note) => {
+      .then(async (owned) => {
         if (!active) return
-        if (note.authorId !== user?.id) {
-          setError(OWN_NOTES_ONLY_MESSAGE)
+        if (
+          !Array.isArray(owned) ||
+          !owned.some(
+            (candidate) =>
+              candidate.id === noteId && candidate.authorId === userId
+          )
+        ) {
+          setError(NOTE_ACCESS_MESSAGE)
           return
         }
+        const res = await fetch(`${DB_LINK}/notes/${encodeURIComponent(noteId)}`)
+        if (res.status === 404) throw new Error("NOT_FOUND")
+        if (!res.ok) throw new Error("LOAD_FAILED")
+        const note = mapNoteFromDTO((await res.json()) as NoteDTO)
+        if (!active) return
         reset({
           title: note.title,
           content: note.content,

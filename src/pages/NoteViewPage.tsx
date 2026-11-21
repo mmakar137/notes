@@ -2,7 +2,12 @@ import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router"
 import { useAuthStore } from "../store/authState"
 import type { Note, NoteDTO } from "../types"
-import { DB_LINK, mapNoteFromDTO, OWN_NOTES_ONLY_MESSAGE } from "../utils"
+import {
+  DB_LINK,
+  mapNoteFromDTO,
+  NOTE_ACCESS_MESSAGE,
+  ownNoteUrl,
+} from "../utils"
 
 export default function NoteViewPage() {
   const { id } = useParams()
@@ -12,19 +17,31 @@ export default function NoteViewPage() {
 
   useEffect(() => {
     let active = true
-    fetch(`${DB_LINK}/notes/${encodeURIComponent(id ?? "")}`)
+    const noteId = id ?? ""
+    const userId = user?.id ?? ""
+
+    fetch(ownNoteUrl(noteId, userId))
       .then(async (res) => {
-        if (res.status === 404) throw new Error("NOT_FOUND")
         if (!res.ok) throw new Error("LOAD_FAILED")
-        return mapNoteFromDTO((await res.json()) as NoteDTO)
+        return (await res.json()) as NoteDTO[]
       })
-      .then((loaded) => {
+      .then(async (owned) => {
         if (!active) return
-        if (loaded.authorId !== user?.id) {
-          setError(OWN_NOTES_ONLY_MESSAGE)
+        if (
+          !Array.isArray(owned) ||
+          !owned.some(
+            (candidate) =>
+              candidate.id === noteId && candidate.authorId === userId
+          )
+        ) {
+          setError(NOTE_ACCESS_MESSAGE)
           return
         }
-        setNote(loaded)
+        const res = await fetch(`${DB_LINK}/notes/${encodeURIComponent(noteId)}`)
+        if (res.status === 404) throw new Error("NOT_FOUND")
+        if (!res.ok) throw new Error("LOAD_FAILED")
+        const loaded = mapNoteFromDTO((await res.json()) as NoteDTO)
+        if (active) setNote(loaded)
       })
       .catch((e: Error) => {
         if (!active) return
